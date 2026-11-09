@@ -1,0 +1,1909 @@
+/* ==========================================================================
+   AI-BASED SMART TRAFFIC SIGNAL OPTIMIZATION
+   Modern Dark-Themed Dashboard Stylesheet
+   ========================================================================== */
+
+:root {
+    /* Color Palette */
+    --bg-main: #090c13;
+    --bg-card: rgba(18, 24, 38, 0.78);
+    --bg-card-hover: rgba(24, 32, 50, 0.9);
+    --bg-surface: #121826;
+    --bg-input: #171f32;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-active: rgba(0, 229, 255, 0.35);
+
+    /* Accents */
+    --accent-blue: #00e5ff;
+    --accent-blue-deep: #0070f3;
+    --accent-red: #ff3366;
+    --accent-red-glow: rgba(255, 51, 102, 0.4);
+    --accent-green: #00f298;
+    --accent-green-glow: rgba(0, 242, 152, 0.4);
+    --accent-yellow: #ffb800;
+    --accent-yellow-glow: rgba(255, 184, 0, 0.4);
+
+    /* Text Colors */
+    --text-primary: #f0f4fc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    /* Fonts */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Outfit', var(--font-sans);
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Transitions & Shadows */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --shadow-glow: 0 0 25px rgba(0, 229, 255, 0.15);
+    --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- Base & Reset --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.dark-theme {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    line-height: 1.5;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient glow background effects */
+.ambient-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.14;
+}
+
+.glow-blue {
+    top: -100px;
+    left: -100px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-blue-deep), transparent 70%);
+}
+
+.glow-red {
+    bottom: -100px;
+    right: -100px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-red), transparent 70%);
+}
+
+.app-container {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 24px 28px 48px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   Header Component
+   ========================================================================== */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 28px;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 22px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.brand-badge {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(255, 51, 102, 0.15));
+    border: 1px solid var(--border-active);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+}
+
+.brand-icon {
+    font-size: 26px;
+}
+
+.pulsing-radar {
+    position: absolute;
+    inset: -3px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--accent-blue);
+    opacity: 0.6;
+    animation: pulseRing 2.4s infinite cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes pulseRing {
+    0% { transform: scale(0.96); opacity: 0.8; }
+    50% { transform: scale(1.08); opacity: 0.2; }
+    100% { transform: scale(0.96); opacity: 0.8; }
+}
+
+.title-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-title {
+    font-family: var(--font-heading);
+    font-size: 1.55rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, #ffffff 40%, var(--accent-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.app-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.system-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    background: rgba(0, 242, 152, 0.08);
+    border: 1px solid rgba(0, 242, 152, 0.3);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-green);
+    letter-spacing: 0.05em;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--accent-green);
+    box-shadow: 0 0 10px var(--accent-green);
+    animation: blinkGlow 2s infinite ease-in-out;
+}
+
+@keyframes blinkGlow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.info-metric-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: rgba(0, 112, 243, 0.1);
+    border: 1px solid rgba(0, 112, 243, 0.3);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.info-metric-pill .metric-val {
+    color: var(--accent-blue);
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.live-clock-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.clock-icon {
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Action & Control Bar
+   ========================================================================== */
+.action-bar-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+}
+
+.action-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.bar-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: rgba(0, 229, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.08em;
+}
+
+.mode-indicator {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+}
+
+.mode-indicator strong {
+    color: var(--text-primary);
+}
+
+.last-sync-text {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.action-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    text-decoration: none;
+}
+
+.btn-icon {
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0070f3, #00d2ff);
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(0, 112, 243, 0.35);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(0, 229, 255, 0.5);
+}
+
+.btn-simulate {
+    background: linear-gradient(135deg, #ff3366, #ff6b8b);
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(255, 51, 102, 0.35);
+}
+
+.btn-simulate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(255, 51, 102, 0.55);
+}
+
+.btn-secondary {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border-color: var(--border-subtle);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-input);
+    border-color: var(--border-active);
+    color: var(--accent-blue);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Main Grid Layout (Junction View & Metrics)
+   ========================================================================== */
+.main-split-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.panel-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+}
+
+.panel-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-icon {
+    font-size: 1.25rem;
+}
+
+.panel-title {
+    font-family: var(--font-heading);
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.service-order-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    background: rgba(0, 229, 255, 0.08);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    border-radius: 999px;
+    font-size: 0.75rem;
+}
+
+.service-order-pill .pill-label {
+    color: var(--text-muted);
+}
+
+.service-order-pill .pill-sequence {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent-blue);
+}
+
+/* ==========================================================================
+   4-Way Junction Intersection View
+   ========================================================================== */
+.junction-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    min-height: 300px;
+    max-height: 500px;
+    background: radial-gradient(circle at center, #182236 0%, #0d121c 100%);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 1fr 1.4fr 1fr;
+    grid-template-columns: 1fr 200px 1fr;
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+/* North Lane */
+.approach-north {
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #1c2434;
+    border-left: 2px solid #334155;
+    border-right: 2px solid #334155;
+    padding: 8px 12px;
+    position: relative;
+}
+
+/* South Lane */
+.approach-south {
+    grid-row: 3;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #1c2434;
+    border-left: 2px solid #334155;
+    border-right: 2px solid #334155;
+    padding: 8px 12px;
+    position: relative;
+}
+
+/* West Lane */
+.approach-west {
+    grid-row: 2;
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1c2434;
+    border-top: 2px solid #334155;
+    border-bottom: 2px solid #334155;
+    padding: 12px 14px;
+    position: relative;
+}
+
+/* East Lane */
+.approach-east {
+    grid-row: 2;
+    grid-column: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #1c2434;
+    border-top: 2px solid #334155;
+    border-bottom: 2px solid #334155;
+    padding: 12px 14px;
+    position: relative;
+}
+
+/* Center Crossing Box */
+.junction-intersection-box {
+    grid-row: 2;
+    grid-column: 2;
+    background: #151c29;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Road Lane Markings */
+.lane-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.lane-marking-dashed {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    border-left: 2px dashed rgba(255, 255, 255, 0.35);
+}
+
+.lane-marking-dashed.horizontal {
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 2px;
+    border-left: none;
+    border-top: 2px dashed rgba(255, 255, 255, 0.35);
+}
+
+/* Crosswalk zebra markings */
+.crosswalk-stripes {
+    position: absolute;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.6) 0px,
+        rgba(255, 255, 255, 0.6) 8px,
+        transparent 8px,
+        transparent 16px
+    );
+}
+
+.crosswalk-top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 12px;
+}
+
+.crosswalk-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 12px;
+}
+
+.crosswalk-left {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 12px;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.6) 0px,
+        rgba(255, 255, 255, 0.6) 8px,
+        transparent 8px,
+        transparent 16px
+    );
+}
+
+.crosswalk-right {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.6) 0px,
+        rgba(255, 255, 255, 0.6) 8px,
+        transparent 8px,
+        transparent 16px
+    );
+}
+
+/* Center Radar Display */
+.center-radar-display {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    background: radial-gradient(circle, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radar-sweep {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 75%, rgba(0, 229, 255, 0.28) 100%);
+    animation: radarSpin 4s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes radarSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.center-active-road-hud {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.active-badge-tag {
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--accent-blue);
+    letter-spacing: 0.06em;
+}
+
+.active-road-name {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+}
+
+.active-timer-display {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    margin-top: 2px;
+    text-shadow: 0 0 10px var(--accent-green-glow);
+}
+
+/* ==========================================================================
+   Traffic Signal Housing & Glowing Bulbs
+   ========================================================================== */
+.signal-housing {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    background: #0f141f;
+    border: 2px solid #232d42;
+    border-radius: 20px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+    position: relative;
+    z-index: 5;
+}
+
+.approach-north .signal-housing,
+.approach-south .signal-housing {
+    flex-direction: row;
+}
+
+.approach-west .signal-housing,
+.approach-east .signal-housing {
+    flex-direction: column;
+}
+
+.light-bulb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #1a2233;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Inactive Bulb Colors */
+.bulb-red { background-color: #3b141e; }
+.bulb-yellow { background-color: #3b3014; }
+.bulb-green { background-color: #143b27; }
+
+/* Active Glowing Bulbs */
+.bulb-red.active {
+    background-color: #ff3366;
+    box-shadow: 0 0 16px #ff3366, 0 0 28px rgba(255, 51, 102, 0.6);
+}
+
+.bulb-yellow.active {
+    background-color: #ffb800;
+    box-shadow: 0 0 16px #ffb800, 0 0 28px rgba(255, 184, 0, 0.6);
+}
+
+.bulb-green.active {
+    background-color: #00f298;
+    box-shadow: 0 0 16px #00f298, 0 0 28px rgba(0, 242, 152, 0.6);
+}
+
+.countdown-badge {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    min-width: 24px;
+    text-align: center;
+}
+
+.countdown-badge.active {
+    color: var(--accent-green);
+    background: rgba(0, 242, 152, 0.15);
+}
+
+.junction-footer-bar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.phase-info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+}
+
+.dot-legend {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot-green { background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+.dot-yellow { background-color: var(--accent-yellow); box-shadow: 0 0 8px var(--accent-yellow); }
+.dot-red { background-color: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+
+/* ==========================================================================
+   Fixed vs Adaptive Comparison Panel
+   ========================================================================== */
+.right-metrics-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.comparison-panel {
+    border-color: rgba(0, 229, 255, 0.15);
+}
+
+.badge-saving {
+    background: linear-gradient(135deg, rgba(0, 242, 152, 0.2), rgba(0, 229, 255, 0.2));
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.comparison-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-fixed {
+    border-left: 3px solid var(--accent-red);
+}
+
+.stat-adaptive {
+    border-left: 3px solid var(--accent-green);
+    background: linear-gradient(145deg, rgba(18, 24, 38, 0.9), rgba(0, 242, 152, 0.05));
+}
+
+.stat-meta {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+}
+
+.stat-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 2px;
+}
+
+.stat-value {
+    font-family: var(--font-mono);
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin: 6px 0 2px;
+}
+
+.stat-fixed .stat-value { color: var(--accent-red); }
+.stat-adaptive .stat-value { color: var(--accent-green); }
+
+.stat-unit {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.stat-sub {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.highlight-success {
+    color: var(--accent-green) !important;
+    font-weight: 600;
+}
+
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 14px;
+}
+
+.kpi-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.kpi-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.kpi-val {
+    font-family: var(--font-mono);
+    font-size: 1.12rem;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.text-red { color: var(--accent-red); }
+.text-green { color: var(--accent-green); }
+.text-cyan { color: var(--accent-blue); }
+.text-blue { color: #3b82f6; }
+
+.efficiency-bar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.bar-label-group {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+}
+
+.progress-track {
+    width: 100%;
+    height: 8px;
+    background: #1e293b;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+    border-radius: 999px;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Charts Panel */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.chart-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 14px;
+}
+
+.chart-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.canvas-container {
+    position: relative;
+    height: 165px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   Four Road Approach Cards
+   ========================================================================== */
+.roads-section {
+    margin-bottom: 24px;
+}
+
+.section-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.title-with-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-heading {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.section-badge {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.upload-tip {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.road-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.road-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: var(--transition);
+}
+
+.road-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 229, 255, 0.3);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+}
+
+.road-card-header {
+    /* Layout handled by additions.css CSS grid override */
+    min-width: 0;
+}
+
+.road-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.compass-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.88rem;
+}
+
+.badge-north { background: rgba(0, 229, 255, 0.15); color: var(--accent-blue); border: 1px solid rgba(0, 229, 255, 0.4); }
+.badge-south { background: rgba(0, 112, 243, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.4); }
+.badge-east  { background: rgba(255, 51, 102, 0.15); color: var(--accent-red); border: 1px solid rgba(255, 51, 102, 0.4); }
+.badge-west  { background: rgba(255, 184, 0, 0.15); color: var(--accent-yellow); border: 1px solid rgba(255, 184, 0, 0.4); }
+
+.road-names .road-title {
+    font-family: var(--font-heading);
+    font-size: 0.96rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.corridor-subtitle {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Density Badges */
+.density-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.badge-low {
+    background: rgba(0, 242, 152, 0.12);
+    color: var(--accent-green);
+    border: 1px solid rgba(0, 242, 152, 0.35);
+}
+
+.badge-medium {
+    background: rgba(255, 184, 0, 0.12);
+    color: var(--accent-yellow);
+    border: 1px solid rgba(255, 184, 0, 0.35);
+}
+
+.badge-high {
+    background: rgba(255, 51, 102, 0.15);
+    color: var(--accent-red);
+    border: 1px solid rgba(255, 51, 102, 0.4);
+    box-shadow: 0 0 12px rgba(255, 51, 102, 0.2);
+}
+
+.road-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 10px 8px;
+    text-align: center;
+}
+
+.road-metric-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.m-title {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
+
+.m-val {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* Processed Vision Preview Frame */
+.detection-preview-frame {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: #000000;
+    border: 1px solid var(--border-subtle);
+    cursor: zoom-in;
+}
+
+.feed-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.detection-preview-frame:hover .feed-img {
+    transform: scale(1.04);
+}
+
+.feed-overlay-tag {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    background: rgba(10, 14, 23, 0.85);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    color: var(--accent-blue);
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+}
+
+/* Upload Controls */
+.upload-control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-surface);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.file-label:hover {
+    border-color: var(--accent-blue);
+    color: var(--text-primary);
+    background: var(--bg-input);
+}
+
+.file-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
+}
+
+/* ==========================================================================
+   Real-Time Status & Event Log Terminal
+   ========================================================================== */
+.log-panel {
+    margin-bottom: 24px;
+}
+
+.btn-text-action {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-text-action:hover {
+    color: var(--accent-blue);
+}
+
+.log-terminal {
+    background: #080b11;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    height: 140px;
+    overflow-y: auto;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.log-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.4;
+}
+
+.log-time {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.log-badge {
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.badge-signal    { background: rgba(0, 242, 152, 0.15); color: var(--accent-green); }
+.badge-vision    { background: rgba(0, 229, 255, 0.15); color: var(--accent-blue); }
+.badge-optimizer { background: rgba(255, 184, 0, 0.15); color: var(--accent-yellow); }
+.badge-system    { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); }
+
+.log-msg {
+    color: var(--text-primary);
+}
+
+/* Custom Scrollbar */
+.log-terminal::-webkit-scrollbar {
+    width: 6px;
+}
+.log-terminal::-webkit-scrollbar-track {
+    background: #080b11;
+}
+.log-terminal::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 3px;
+}
+
+/* Footer */
+.app-footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* ==========================================================================
+   Image Inspection Modal
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+}
+
+.modal-backdrop.open {
+    display: flex;
+}
+
+.modal-dialog {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-active);
+    border-radius: var(--radius-lg);
+    max-width: 900px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    animation: modalIn 0.25s ease-out;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.btn-close:hover {
+    color: #ffffff;
+}
+
+.modal-body {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    background: #000000;
+}
+
+.modal-img {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 22px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.modal-info-text {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1100;
+}
+
+.toast {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 12px 18px;
+    font-size: 0.84rem;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.toast.toast-success { border-left: 4px solid var(--accent-green); }
+.toast.toast-error   { border-left: 4px solid var(--accent-red); }
+.toast.toast-info    { border-left: 4px solid var(--accent-blue); }
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 1200px) {
+    .main-split-grid {
+        grid-template-columns: 1fr;
+    }
+    .road-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .action-bar-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .action-bar-right {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .action-bar-right .btn {
+        flex: 1;
+        justify-content: center;
+    }
+    .road-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+    .junction-viewport {
+        grid-template-rows: 1fr 1.4fr 1fr;
+        grid-template-columns: 1fr 160px 1fr;
+    }
+    .center-radar-display {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+/* ==========================================================================
+   NIGHT-MODE & LOW-LIGHT DETECTION STYLES
+   ========================================================================== */
+
+/* Darker Theme Variant when Night Mode is Active */
+body.night-mode-active {
+    --bg-main: #04060a;
+    --bg-card: rgba(11, 16, 28, 0.88);
+    --bg-surface: #0a0e1a;
+    --bg-input: #0f1526;
+    --border-subtle: rgba(168, 85, 247, 0.18);
+    --border-active: rgba(168, 85, 247, 0.45);
+    --shadow-card: 0 10px 32px rgba(0, 0, 0, 0.65);
+    --shadow-glow: 0 0 25px rgba(168, 85, 247, 0.22);
+}
+
+body.night-mode-active .ambient-glow.glow-blue {
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.24), transparent 70%);
+}
+
+body.night-mode-active .ambient-glow.glow-red {
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.22), transparent 70%);
+}
+
+body.night-mode-active .app-header {
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.12);
+}
+
+/* Night Mode Active Banner */
+.night-mode-banner {
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(30, 20, 60, 0.9) 0%, rgba(15, 20, 45, 0.9) 100%);
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    border-radius: var(--radius-md);
+    padding: 14px 22px;
+    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: fadeInBanner 0.4s ease-out;
+}
+
+@keyframes fadeInBanner {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.night-banner-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.night-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.night-banner-moon {
+    font-size: 24px;
+    filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.7));
+    animation: lunarPulse 3s infinite ease-in-out;
+}
+
+@keyframes lunarPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6)); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 14px rgba(168, 85, 247, 0.9)); }
+}
+
+.night-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.night-banner-title {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: #e9d5ff;
+    letter-spacing: 0.8px;
+}
+
+.night-banner-desc {
+    font-size: 13px;
+    color: #c4b5fd;
+    line-height: 1.4;
+}
+
+.night-banner-status-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #f3e8ff;
+    background: rgba(168, 85, 247, 0.35);
+    border: 1px solid rgba(168, 85, 247, 0.6);
+    padding: 6px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+}
+
+/* Lighting Simulation Dropdown in Action Bar */
+.lighting-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.lighting-select-wrapper:hover,
+.lighting-select-wrapper:focus-within {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.15);
+}
+
+.lighting-select-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.lighting-select {
+    background: transparent;
+    color: var(--text-primary);
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    outline: none;
+    cursor: pointer;
+    padding: 4px 2px;
+}
+
+.lighting-select option {
+    background: #121826;
+    color: #f0f4fc;
+}
+
+/* Road Card Badges Group */
+.card-badges-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Lighting Badge on Road Card Header */
+.lighting-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    transition: var(--transition);
+}
+
+.lighting-badge .badge-icon {
+    font-size: 12px;
+}
+
+.lighting-badge.lighting-day {
+    background: rgba(255, 184, 0, 0.14);
+    border: 1px solid rgba(255, 184, 0, 0.35);
+    color: #ffd166;
+    box-shadow: 0 0 8px rgba(255, 184, 0, 0.12);
+}
+
+.lighting-badge.lighting-dusk {
+    background: rgba(251, 146, 60, 0.16);
+    border: 1px solid rgba(251, 146, 60, 0.4);
+    color: #fb923c;
+    box-shadow: 0 0 8px rgba(251, 146, 60, 0.15);
+}
+
+.lighting-badge.lighting-night {
+    background: rgba(168, 85, 247, 0.22);
+    border: 1px solid rgba(168, 85, 247, 0.55);
+    color: #d8b4fe;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+    animation: nightBadgePulse 2.8s infinite ease-in-out;
+}
+
+@keyframes nightBadgePulse {
+    0%, 100% { border-color: rgba(168, 85, 247, 0.55); }
+    50% { border-color: rgba(168, 85, 247, 0.9); box-shadow: 0 0 14px rgba(168, 85, 247, 0.4); }
+}
+
+/* Vision View Control Bar & Toggle */
+.vision-view-control-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 4px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.view-status-tag {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.btn-toggle-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-toggle-view:hover {
+    color: var(--text-primary);
+    border-color: var(--accent-blue);
+    background: rgba(0, 229, 255, 0.08);
+}
+
+.btn-toggle-view.highlight-night {
+    border-color: rgba(168, 85, 247, 0.6);
+    color: #e9d5ff;
+    background: rgba(168, 85, 247, 0.15);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.25);
+}
+
+/* Detection Preview Container */
+.detection-preview-container {
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.preview-single-view {
+    cursor: pointer;
+    position: relative;
+}
+
+/* Side-by-Side Split View */
+.preview-split-view {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background: #0b0f19;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+.split-pane {
+    position: relative;
+    cursor: pointer;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: var(--transition);
+}
+
+.split-pane:hover {
+    border-color: var(--accent-blue);
+    transform: scale(1.02);
+}
+
+.split-label {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background: rgba(15, 20, 32, 0.88);
+    color: #f0f4fc;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    z-index: 2;
+    letter-spacing: 0.4px;
+}
+
+.split-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Detection Accuracy Mode Panel */
+.accuracy-mode-panel {
+    margin-bottom: 24px;
+}
+
+.panel-caption {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.accuracy-summary-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 16px;
+    background: rgba(0, 242, 152, 0.12);
+    border: 1px solid rgba(0, 242, 152, 0.35);
+    color: var(--accent-green);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+}
+
+.accuracy-roads-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.accuracy-road-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.accuracy-road-card:hover {
+    border-color: var(--border-active);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.acc-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 8px;
+}
+
+.acc-road-name {
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--text-primary);
+    letter-spacing: 0.6px;
+}
+
+.acc-lighting-tag {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.acc-lighting-tag.tag-day {
+    background: rgba(255, 184, 0, 0.15);
+    color: #ffd166;
+    border: 1px solid rgba(255, 184, 0, 0.35);
+}
+
+.acc-lighting-tag.tag-dusk {
+    background: rgba(251, 146, 60, 0.16);
+    color: #fb923c;
+    border: 1px solid rgba(251, 146, 60, 0.4);
+}
+
+.acc-lighting-tag.tag-night {
+    background: rgba(168, 85, 247, 0.22);
+    color: #d8b4fe;
+    border: 1px solid rgba(168, 85, 247, 0.55);
+}
+
+.acc-pipeline-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.acc-brightness-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.acc-bar-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+}
+
+.acc-meter-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.acc-meter-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.acc-meter-fill.meter-day {
+    background: linear-gradient(90deg, #ffb800, #ffe17d);
+}
+
+.acc-meter-fill.meter-dusk {
+    background: linear-gradient(90deg, #f97316, #fb923c);
+}
+
+.acc-meter-fill.meter-night {
+    background: linear-gradient(90deg, #9333ea, #c084fc);
+}
+
+.acc-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-top: auto;
+}
+
+/* Event Log Custom Badges */
+.badge-lowlight {
+    background: rgba(251, 146, 60, 0.2);
+    color: #fb923c;
+    border: 1px solid rgba(251, 146, 60, 0.4);
+}
+
+.badge-night {
+    background: rgba(168, 85, 247, 0.25);
+    color: #d8b4fe;
+    border: 1px solid rgba(168, 85, 247, 0.55);
+}
+
+@media (max-width: 1180px) {
+    .accuracy-roads-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .accuracy-roads-grid {
+        grid-template-columns: 1fr;
+    }
+    .preview-split-view {
+        grid-template-columns: 1fr;
+    }
+    .split-img {
+        height: 140px;
+    }
+}

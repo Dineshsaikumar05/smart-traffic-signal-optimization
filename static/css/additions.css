@@ -1,0 +1,1967 @@
+/* ==========================================================================
+   ADDITIONS — Demo-Ready Styles
+   AI-Based Smart Traffic Signal Optimization
+   ========================================================================== */
+
+/* ---- Reset Button ---- */
+.btn-reset {
+    background: linear-gradient(135deg, #374151, #4b5563);
+    color: #d1d5db;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn-reset:hover {
+    background: linear-gradient(135deg, #4b5563, #6b7280);
+    color: #f9fafb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(107, 114, 128, 0.4);
+}
+
+/* ---- Loading Spinner ---- */
+.btn-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spinBtn 0.7s linear infinite;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+@keyframes spinBtn {
+    to { transform: rotate(360deg); }
+}
+
+/* ---- Performance Summary Panel ---- */
+.summary-panel {
+    margin-bottom: 24px;
+}
+
+.summary-stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+}
+
+@media (max-width: 1100px) and (min-width: 601px) {
+    .summary-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .summary-stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.summary-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    transition: var(--transition);
+}
+
+.summary-stat-card:hover {
+    border-color: var(--border-active);
+    background: rgba(0, 229, 255, 0.04);
+}
+
+.summary-stat-card.summary-highlight {
+    background: rgba(0, 242, 152, 0.06);
+    border-color: rgba(0, 242, 152, 0.25);
+}
+
+.summary-stat-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.summary-stat-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.summary-stat-val {
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 2px;
+}
+
+.summary-green-times {
+    font-size: 0.82rem !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+}
+
+/* ---- Emergency Panel ---- */
+.emergency-panel {
+    margin-bottom: 24px;
+    border-color: rgba(255, 51, 102, 0.2);
+}
+
+.emergency-panel:hover {
+    border-color: rgba(255, 51, 102, 0.4) !important;
+}
+
+.panel-caption {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.emergency-status-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+    border: 1px solid rgba(107, 114, 128, 0.3);
+    transition: var(--transition);
+}
+
+.emergency-status-tag.active {
+    background: rgba(255, 51, 102, 0.18);
+    color: #ff6b8b;
+    border-color: rgba(255, 51, 102, 0.5);
+    animation: pulseRing 1.5s infinite;
+}
+
+.emergency-buttons-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 900px) {
+    .emergency-buttons-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .emergency-buttons-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.btn-emergency {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.85), rgba(239, 68, 68, 0.9));
+    color: #fff;
+    border: 1px solid rgba(255, 51, 102, 0.5);
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+    font-size: 0.84rem;
+    font-weight: 700;
+    justify-content: center;
+    padding: 11px 16px;
+    transition: var(--transition);
+}
+
+.btn-emergency:hover {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(220, 38, 38, 0.55);
+}
+
+.btn-emergency:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.emergency-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid rgba(255, 51, 102, 0.4);
+}
+
+/* ---- Emergency Badge in log ---- */
+.badge-emergency {
+    background: rgba(220, 38, 38, 0.22);
+    color: #fca5a5;
+    border: 1px solid rgba(220, 38, 38, 0.5);
+}
+
+/* ---- Responsive Improvements ---- */
+@media (max-width: 1100px) {
+    .main-split-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .right-metrics-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 900px) {
+    .right-metrics-column {
+        grid-template-columns: 1fr;
+    }
+
+    .app-header {
+        flex-direction: column;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+    .header-right {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .action-bar-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .action-bar-right {
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .app-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        padding: 14px 12px 32px;
+    }
+
+    .road-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-bar-right {
+        gap: 8px;
+    }
+
+    .btn {
+        padding: 9px 14px;
+        font-size: 0.82rem;
+    }
+}
+
+/* ---- Night mode text readability ---- */
+body.night-mode-active .text-muted,
+body.night-mode-active .acc-desc,
+body.night-mode-active .last-sync-text,
+body.night-mode-active .panel-caption,
+body.night-mode-active .emergency-note {
+    color: #6b7280;
+}
+
+body.night-mode-active .log-msg {
+    color: #c7d3e8;
+}
+
+body.night-mode-active .summary-stat-label {
+    color: #6b7280;
+}
+
+/* ---- Normal theme text readability fix ---- */
+.text-red { color: var(--accent-red) !important; }
+.text-green { color: var(--accent-green) !important; }
+.text-cyan { color: var(--accent-blue) !important; }
+.text-blue { color: var(--accent-blue-deep) !important; }
+
+/* Ensure log messages are always readable */
+.log-msg {
+    color: #b0bec5;
+    font-size: 0.84rem;
+}
+
+/* ---- Toast improvements ---- */
+.toast {
+    min-width: 260px;
+    max-width: 400px;
+}
+
+/* Tablet breakpoint for junction viewport */
+@media (max-width: 1024px) {
+    .junction-viewport {
+        min-height: 320px;
+    }
+
+    .road-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .road-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---- Flashing Emergency Alert Banner ---- */
+.emergency-alert-banner {
+    background: linear-gradient(90deg, rgba(220, 38, 38, 0.95), rgba(185, 28, 28, 0.95));
+    border: 2px solid #ef4444;
+    border-radius: var(--radius-md);
+    padding: 14px 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+    animation: emergencyPulse 1.2s infinite ease-in-out;
+}
+
+@keyframes emergencyPulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        border-color: #ef4444;
+    }
+    50% {
+        box-shadow: 0 0 35px rgba(239, 68, 68, 0.9);
+        border-color: #fca5a5;
+    }
+}
+
+.emergency-alert-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.emergency-alert-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.emergency-siren-icon {
+    font-size: 1.8rem;
+    animation: sirenBounce 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes sirenBounce {
+    from { transform: scale(0.9) rotate(-10deg); }
+    to { transform: scale(1.15) rotate(10deg); }
+}
+
+.emergency-alert-title {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+}
+
+.emergency-alert-desc {
+    font-size: 0.84rem;
+    color: #fecaca;
+    font-weight: 500;
+}
+
+.btn-clear-emergency-banner {
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-clear-emergency-banner:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-clear-emergency {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    color: #fca5a5 !important;
+    font-size: 0.8rem;
+    padding: 6px 14px;
+}
+
+.btn-clear-emergency:hover {
+    background: rgba(239, 68, 68, 0.3) !important;
+    color: #ffffff !important;
+}
+
+/* Road Card Emergency Badge */
+.emergency-badge-tag {
+    font-size: 10px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: #ffffff;
+    border: 1px solid #fca5a5;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+    animation: emergencyBadgeFlash 1s infinite alternate;
+}
+
+@keyframes emergencyBadgeFlash {
+    from { opacity: 0.85; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1.05); }
+}
+
+.road-card.is-emergency {
+    border-color: rgba(239, 68, 68, 0.7) !important;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.35) !important;
+}
+
+/* ---- Detection Settings Panel ---- */
+.detection-settings-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    border-radius: var(--radius-md);
+    padding: 14px 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+}
+
+.det-settings-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.det-icon {
+    font-size: 1.6rem;
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
+}
+
+.det-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+}
+
+.det-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.det-slider-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.det-slider-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.det-range-slider {
+    width: 140px;
+    accent-color: #00e5ff;
+    cursor: pointer;
+}
+
+.det-slider-val-badge {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #00e5ff;
+    background: rgba(0, 229, 255, 0.12);
+    border: 1px solid rgba(0, 229, 255, 0.4);
+    padding: 2px 8px;
+    border-radius: 6px;
+    min-width: 42px;
+    text-align: center;
+}
+
+.det-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+/* Engine Badge */
+.engine-badge-tag {
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: rgba(0, 229, 255, 0.10);
+    color: #00e5ff;
+    border: 1px solid rgba(0, 229, 255, 0.35);
+}
+
+/* Sample Badge */
+.sample-badge-tag {
+    font-size: 10px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(245, 158, 11, 0.18);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+}
+
+/* Video Stats Indicator */
+.video-stats-tag {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    color: #a5b4fc;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin: 6px 0;
+    text-align: center;
+}
+
+/* ==========================================================================
+   UI ENHANCEMENTS: HOW IT WORKS, CONTROLS, RUN HISTORY, RESPONSIVENESS
+   ========================================================================== */
+
+/* ---- How It Works Collapsible Strip ---- */
+.how-it-works-card {
+    background: linear-gradient(135deg, rgba(18, 24, 38, 0.95), rgba(15, 23, 42, 0.95));
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    border-radius: var(--radius-md);
+    margin-bottom: 22px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    transition: var(--transition);
+}
+
+.how-it-works-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 14px 20px;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-size: 0.98rem;
+    font-weight: 700;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+.how-it-works-toggle:hover {
+    background: rgba(0, 229, 255, 0.05);
+}
+
+.toggle-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hiw-badge-icon {
+    font-size: 1.25rem;
+}
+
+.hiw-title {
+    color: #e0f2fe;
+    letter-spacing: 0.02em;
+}
+
+.hiw-toggle-arrow {
+    color: var(--accent-blue);
+    font-size: 0.85rem;
+    transition: transform 0.3s ease;
+}
+
+.how-it-works-content {
+    padding: 0 20px 18px 20px;
+    display: block;
+}
+
+.how-it-works-content.collapsed {
+    display: none;
+}
+
+.how-it-works-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hiw-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    transition: var(--transition);
+}
+
+.hiw-step:hover {
+    border-color: rgba(0, 229, 255, 0.3);
+    background: rgba(0, 229, 255, 0.03);
+    transform: translateY(-2px);
+}
+
+.step-num-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0070f3, #00d2ff);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.step-title {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #f0f4fc;
+    letter-spacing: 0.01em;
+}
+
+.step-desc {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+/* ---- Start Demo Button ---- */
+.btn-demo {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    font-weight: 700;
+}
+
+.btn-demo:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(16, 185, 129, 0.55);
+}
+
+/* Control Buttons Formatting: white-space nowrap, equal height min 44px, wrapper with subtext */
+.control-btn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+}
+
+.control-btn-item .btn {
+    width: 100%;
+}
+
+.btn-subtext {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.2;
+    max-width: 160px;
+    white-space: normal;
+}
+
+.action-bar-right {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.action-bar-right .btn,
+.btn-secondary,
+.btn-simulate,
+.btn-primary,
+.btn-reset,
+.btn-demo {
+    white-space: nowrap !important;
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Last synchronized on its own line */
+.action-bar-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.last-sync-text {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.mode-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.88rem;
+}
+
+.mode-explainer {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* "AI ENGINE ONLINE" badge nowrap */
+.system-status-pill {
+    white-space: nowrap !important;
+}
+
+.system-status-pill .status-text {
+    white-space: nowrap !important;
+}
+
+/* ---- Run History Section ---- */
+.history-panel {
+    margin-bottom: 24px;
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.history-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-sm {
+    padding: 6px 14px !important;
+    font-size: 0.78rem !important;
+    min-height: 34px !important;
+}
+
+.history-charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.history-table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.history-table th {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    padding: 10px 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.70rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.history-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.history-table tr:hover td {
+    background: rgba(0, 229, 255, 0.03);
+}
+
+.history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.history-empty-cell {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 24px 14px !important;
+    font-family: var(--font-sans) !important;
+}
+
+.badge-hist-emerg {
+    background: rgba(220, 38, 38, 0.2);
+    color: #fca5a5;
+    border: 1px solid rgba(220, 38, 38, 0.4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.70rem;
+    font-weight: 700;
+}
+
+.badge-hist-norm {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.70rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   LAYOUT FIXES & RESPONSIVENESS (1440, 1366, 1032, 768, 390px)
+   ========================================================================== */
+
+/* Universal safeguard against overflow without hiding overflow on body */
+* {
+    min-width: 0;
+}
+
+img, canvas, svg, video {
+    max-width: 100%;
+    height: auto;
+}
+
+.canvas-container canvas {
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 24px 28px 48px;
+    min-width: 0;
+}
+
+/* Junction View Scaling Container */
+.junction-viewport {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    /* aspect-ratio drives height; remove any fixed-height overrides */
+    height: auto !important;
+    min-height: 260px;
+    max-height: 500px;
+}
+
+/* Tablet (768px – 1100px):
+   Every section uses full container width; Fixed vs Adaptive full width, title <= 2 lines;
+   Remove empty space under Junction Analytics charts
+*/
+@media (max-width: 1100px) and (min-width: 768px) {
+    .main-split-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .right-metrics-column {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .comparison-panel {
+        width: 100%;
+    }
+
+    .comparison-panel .panel-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.3;
+    }
+
+    .charts-panel {
+        width: 100%;
+    }
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    /* Remove empty space under Junction Analytics charts */
+    .chart-box .canvas-container {
+        height: 200px !important;
+    }
+
+    .accuracy-roads-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .road-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .summary-stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .history-charts-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* General breakpoint for <= 1100px */
+@media (max-width: 1100px) {
+    .how-it-works-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* Breakpoint for <= 1032px */
+@media (max-width: 1032px) {
+    .action-bar-right {
+        gap: 10px;
+    }
+
+    .control-btn-item {
+        flex: 1 1 calc(33.333% - 10px);
+        min-width: 130px;
+    }
+
+    .lighting-select-wrapper {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+}
+
+/* Mobile & Tablet below 768px */
+@media (max-width: 768px) {
+    .app-container {
+        padding: 12px 10px 32px;
+    }
+
+    .main-split-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .right-metrics-column {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 16px;
+    }
+
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .history-charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .junction-viewport {
+        grid-template-rows: 1fr 1.3fr 1fr;
+        grid-template-columns: 1fr 150px 1fr;
+    }
+
+    .center-radar-display {
+        width: 100px;
+        height: 100px;
+    }
+
+    .summary-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .control-btn-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .btn-subtext {
+        max-width: 100%;
+    }
+}
+
+/* Below 600px:
+   Stack section titles above their side badges;
+   Place each road card's lighting and density badges on a second row under the title
+*/
+@media (max-width: 600px) {
+    /* Stack section titles above side badges */
+    .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .panel-header .service-order-pill,
+    .panel-header .badge-saving,
+    .panel-header .accuracy-summary-pill,
+    .panel-header .emergency-status-tag,
+    .panel-header .log-actions,
+    .panel-header .history-actions-group {
+        align-self: flex-start;
+        margin-top: 2px;
+    }
+
+    .section-title-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .title-with-pill {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    /* Road card header: title row, then second row with lighting and density badges */
+    .road-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .road-identity {
+        width: 100%;
+    }
+
+    .card-badges-group {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        padding-top: 6px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Detection settings slider wrap */
+    .detection-settings-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .det-slider-group {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .det-range-slider {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    /* Junction View compact scaling for 390px */
+    .junction-viewport {
+        grid-template-rows: 1fr 1.2fr 1fr;
+        grid-template-columns: 1fr 120px 1fr;
+    }
+
+    .center-radar-display {
+        width: 80px;
+        height: 80px;
+    }
+
+    .active-road-name {
+        font-size: 0.95rem;
+    }
+
+    .active-timer-display {
+        font-size: 1.05rem;
+    }
+
+    .signal-housing {
+        padding: 4px 6px;
+        gap: 4px;
+    }
+
+    .light-bulb {
+        width: 14px;
+        height: 14px;
+    }
+
+    .countdown-badge {
+        font-size: 0.70rem;
+        padding: 1px 4px;
+    }
+
+    .junction-footer-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    /* Summary cards: single column on very small screens */
+    .summary-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Detection settings: prevent overflow at 390px */
+    .det-controls-flex {
+        width: 100%;
+        box-sizing: border-box;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .det-model-group {
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+    }
+
+    .det-model-select {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .det-slider-val-badge {
+        flex-shrink: 0;
+    }
+}
+
+/* ==========================================================================
+   ROAD CARD HEADER ROWS — CSS GRID (3-column, 2-row)
+   col 1: compass badge | col 2: title+corridor | col 3: lighting badge
+   row 2: density badge + engine badge (full width)
+   ========================================================================== */
+
+/* Replace old flex rows with a 2-row CSS grid */
+.road-card-header {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-rows: auto auto !important;
+    column-gap: 10px !important;
+    row-gap: 4px !important;
+    align-items: start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    /* override style.css flex rules */
+    justify-content: unset !important;
+}
+
+/* Col 1, row 1: compass badge */
+.road-card-header .compass-badge {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    flex-shrink: 0;
+}
+
+/* Col 2, row 1: title group (title + corridor stacked) */
+.card-header-title-col {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.road-title {
+    font-family: var(--font-heading) !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    min-width: 8ch !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+}
+
+.corridor-subtitle {
+    display: block !important;
+    font-size: 0.70rem !important;
+    font-family: var(--font-mono) !important;
+    color: var(--text-muted) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+}
+
+/* Col 3, row 1: lighting badge */
+.card-header-lighting-col {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+    flex-shrink: 0;
+}
+
+.card-header-lighting-col .lighting-badge {
+    white-space: nowrap !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* Row 2: density + engine badges — span full grid width */
+.card-header-row3 {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+    min-width: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Engine badge */
+.engine-badge-tag {
+    flex-shrink: 0 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    font-family: var(--font-mono) !important;
+    letter-spacing: 0.04em !important;
+    padding: 2px 7px !important;
+    border-radius: 6px !important;
+    background: rgba(99, 102, 241, 0.15) !important;
+    color: #a5b4fc !important;
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    white-space: nowrap !important;
+}
+
+/* Hide old flex-based row wrappers (they are replaced by the grid) */
+.card-header-row1,
+.card-header-row2 {
+    display: contents !important;  /* participate in parent grid, not a box */
+}
+.road-title-group {
+    display: contents !important;
+}
+
+/* Upload warning banner */
+.upload-warning-banner {
+    display: none;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-left: 3px solid #f59e0b;
+    color: #fbbf24;
+    font-size: 0.75rem;
+    padding: 7px 10px;
+    border-radius: 6px;
+    margin: 6px 0 4px;
+    line-height: 1.4;
+}
+
+/* Model estimate disclaimer under Fixed vs Adaptive card */
+.model-estimate-disclaimer {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-left: 2px solid rgba(100, 116, 139, 0.4);
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   SIGNAL PHASE TIMELINE BAR
+   ========================================================================== */
+
+.signal-timeline-wrapper {
+    padding: 10px 14px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin-top: 6px;
+}
+
+.timeline-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.timeline-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.timeline-active-info {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--accent-green);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.signal-timeline-bar {
+    display: flex;
+    width: 100%;
+    height: 22px;
+    border-radius: 8px;
+    overflow: hidden;
+    gap: 2px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.timeline-segment {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+    cursor: default;
+    opacity: 0.55;
+}
+
+.timeline-segment.active-segment {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+.timeline-segment-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 6px 0 0 6px;
+    transition: width 0.9s linear;
+}
+
+.timeline-segment-label {
+    position: relative;
+    z-index: 1;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 0.04em;
+}
+
+/* Road-specific segment colors */
+.seg-north  { background: rgba(0, 229, 255, 0.35); }
+.seg-south  { background: rgba(59, 130, 246, 0.45); }
+.seg-east   { background: rgba(255, 51, 102, 0.40); }
+.seg-west   { background: rgba(255, 184, 0, 0.40); }
+
+.seg-north.active-segment  { background: rgba(0, 229, 255, 0.70); }
+.seg-south.active-segment  { background: rgba(59, 130, 246, 0.80); }
+.seg-east.active-segment   { background: rgba(255, 51, 102, 0.75); }
+.seg-west.active-segment   { background: rgba(255, 184, 0, 0.75); }
+
+/* ==========================================================================
+   HISTORY CHARTS HEIGHT
+   ========================================================================== */
+.history-charts-grid .chart-box .canvas-container {
+    height: 280px !important;
+}
+
+/* ==========================================================================
+   JUNCTION PANEL: flex-grow intersection box to fill available height,
+   remove empty space under Signal Phase Timeline, pin legend & timeline
+   ========================================================================== */
+.main-split-grid {
+    align-items: stretch !important;
+}
+
+.junction-panel {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.junction-panel > .panel-header {
+    flex-shrink: 0 !important;
+}
+
+.junction-viewport {
+    flex: 1 1 0% !important;
+    width: 100% !important;
+    min-height: 260px !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+    max-height: none !important;
+    margin-bottom: 0 !important;
+}
+
+/* Tighten and pin junction-footer-bar & timeline at the bottom */
+.junction-footer-bar {
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+    padding-top: 8px !important;
+    padding-bottom: 6px !important;
+}
+
+.signal-timeline-wrapper {
+    flex-shrink: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 6px !important;
+    padding-bottom: 4px !important;
+}
+
+/* ==========================================================================
+   MODEL SELECTOR & ACCURACY TRACKING ENHANCEMENTS
+   ========================================================================== */
+.det-controls-flex {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.det-model-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.det-model-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.det-model-select {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    color: var(--accent-blue);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    outline: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.det-model-select:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+/* Actual Count Input on Road Cards */
+.actual-count-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 8px 0 6px 0;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+}
+
+.actual-count-label {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.actual-count-input {
+    width: 80px;
+    background: rgba(10, 15, 25, 0.9);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    color: #f0f4fc;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-align: right;
+    outline: none;
+    transition: var(--transition);
+}
+
+.actual-count-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+/* Accuracy Feedback Tag on Road Cards */
+.accuracy-feedback-tag {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Accuracy Report Panel */
+.accuracy-report-panel {
+    background: linear-gradient(135deg, rgba(18, 24, 38, 0.9), rgba(13, 18, 28, 0.9));
+    border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.accuracy-mae-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 242, 152, 0.1);
+    border: 1px solid rgba(0, 242, 152, 0.35);
+    color: #00f298;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.accuracy-report-placeholder {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 18px;
+    margin: 0;
+}
+
+.accuracy-report-table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.accuracy-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.accuracy-report-table th,
+.accuracy-report-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.accuracy-report-table th {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-acc-high {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(0, 242, 152, 0.15);
+    color: #00f298;
+    border: 1px solid rgba(0, 242, 152, 0.4);
+}
+
+.badge-acc-med {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.badge-acc-dev {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* ---- Waiting for Photos Notice Banner (Requirement A2) ---- */
+.waiting-notice-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.4), rgba(59, 130, 246, 0.15));
+    border: 1px solid rgba(96, 165, 250, 0.5);
+    border-radius: var(--radius-md);
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+.waiting-notice-banner .notice-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.6));
+}
+.waiting-notice-banner .notice-text {
+    font-size: 0.92rem;
+    color: #e2e8f0;
+    line-height: 1.5;
+}
+.waiting-notice-banner .notice-text strong {
+    color: #93c5fd;
+}
+
+/* ---- Collapsed Test Tools Section (Requirement B7) ---- */
+.test-tools-details {
+    margin-top: 16px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px dashed rgba(255, 255, 255, 0.18);
+    border-radius: var(--radius-md);
+    padding: 12px 18px;
+    transition: all 0.2s ease;
+}
+.test-tools-details[open] {
+    background: rgba(15, 23, 42, 0.85);
+    border-color: rgba(245, 158, 11, 0.4);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+.test-tools-summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.test-tools-summary:hover {
+    color: #fbbf24;
+}
+.test-tools-body {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ---- Confidence Sweep (Requirement C14) ---- */
+.confidence-sweep-panel {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+}
+.confidence-sweep-results {
+    margin-top: 12px;
+    overflow-x: auto;
+}
+.sweep-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.sweep-table th, .sweep-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.sweep-table th {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* ---- File Status & Upload Feedback Badges (Requirement C8, C10, C11) ---- */
+.file-status-badge {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 8px;
+}
+.duplicate-note-banner {
+    font-size: 0.75rem;
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin: 6px 0;
+}
+.upload-failed-banner {
+    font-size: 0.75rem;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin: 6px 0;
+}
+.road-lighting-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+.road-lighting-select {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    border-radius: 4px;
+    font-size: 0.74rem;
+    padding: 2px 6px;
+    cursor: pointer;
+}
+.road-lighting-select:focus {
+    outline: none;
+    border-color: #00e5ff;
+}
+
+/* Card Status Badges */
+.card-status-tag {
+    font-size: 9px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+.tag-test {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.5);
+}
+.tag-previous {
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.5);
+}
+.tag-nodata {
+    background: rgba(100, 116, 139, 0.2);
+    color: #94a3b8;
+    border: 1px solid rgba(100, 116, 139, 0.5);
+}
+.badge-nodata {
+    background: rgba(100, 116, 139, 0.2) !important;
+    color: #94a3b8 !important;
+    border-color: rgba(100, 116, 139, 0.4) !important;
+}
+.badge-acc-na {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(100, 116, 139, 0.15);
+    color: #94a3b8;
+    border: 1px solid rgba(100, 116, 139, 0.3);
+}
+.disabled-btn {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    filter: grayscale(0.8);
+}
+
+/* -------------------------------------------------------------
+   Road Card Sizing & Equal Layout Controls (Item 1 & Item 2)
+   ------------------------------------------------------------- */
+.lighting-override-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 6px 0;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+.override-label {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.road-lighting-select {
+    width: 90px;
+    padding: 3px 6px;
+    font-size: 0.76rem;
+    background: rgba(10, 15, 25, 0.9);
+    border: 1px solid rgba(0, 229, 255, 0.25);
+    color: #f0f4fc;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+.road-lighting-select:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+/* Fixed space reserved for file selection status badge */
+.file-status-slot {
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.file-selection-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    font-size: 0.74rem;
+    font-family: var(--font-mono);
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Feed image 4:3 fixed-aspect ratio container (Item 2) */
+.preview-single-view {
+    width: 100% !important;
+    aspect-ratio: 4 / 3 !important;
+    background: #000000 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    cursor: zoom-in !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+
+.preview-single-view .feed-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    background: #000000 !important;
+    display: block !important;
+    transition: transform 0.3s ease !important;
+}
+
+.preview-single-view:hover .feed-img {
+    transform: scale(1.03) !important;
+}
+
+/* History filter checkbox toggle (Item 4) */
+.history-filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+    margin-right: 8px;
+    font-weight: 500;
+}
+
+.history-filter-toggle input[type="checkbox"] {
+    accent-color: var(--accent-blue);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+
+
+
+

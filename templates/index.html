@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Based Smart Traffic Signal Optimization | Autonomous 4-Way Junction Control</title>
+    <meta name="description" content="Simulate real-time 4-way junction traffic optimization with OpenCV and YOLOv8 vehicle density detection, low-light enhancement, night-mode headlight detection, and adaptive signal timing.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/additions.css') }}">
+</head>
+<body class="dark-theme">
+    <!-- Background glowing ambient lights -->
+    <div class="ambient-glow glow-blue"></div>
+    <div class="ambient-glow glow-red"></div>
+
+    <!-- Main Container -->
+    <div class="app-container" id="appContainer">
+        
+        <!-- Header -->
+        <header class="app-header" id="headerSection">
+            <div class="header-left">
+                <div class="brand-badge">
+                    <span class="pulsing-radar"></span>
+                    <span class="brand-icon">🚦</span>
+                </div>
+                <div class="title-wrapper">
+                    <h1 class="app-title">AI-Based Smart Traffic Signal Optimization</h1>
+                    <p class="app-subtitle">Computer Vision Vehicle Density Analysis &amp; Dynamic 4-Way Junction Allocation with Night-Mode / Low-Light Detection</p>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="system-status-pill" id="systemStatusPill">
+                    <span class="status-dot"></span>
+                    <span class="status-text" id="systemStatusText">AI ENGINE ONLINE</span>
+                </div>
+                <div class="info-metric-pill">
+                    <span class="metric-label">CYCLE:</span>
+                    <span class="metric-val" id="headerCycleTime">120s</span>
+                </div>
+                <div class="live-clock-card" id="liveClockCard">
+                    <span class="clock-icon">🕒</span>
+                    <span class="clock-time" id="liveClock">00:00:00</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Waiting For Photos Notice (Requirement A2) -->
+        <div class="waiting-notice-banner" id="waitingNotice">
+            <div class="waiting-notice-content">
+                <span class="waiting-notice-icon">📷</span>
+                <span class="waiting-notice-text">Waiting for photos: upload one image or video per road and click Analyze Traffic</span>
+            </div>
+        </div>
+
+        <!-- Dynamic Night Mode Active Banner (Visible when any road is in night mode) -->
+        <div class="night-mode-banner" id="nightModeBanner" style="display: none;">
+            <div class="night-banner-content">
+                <div class="night-banner-left">
+                    <span class="night-banner-moon">🌙</span>
+                    <div class="night-banner-text">
+                        <strong class="night-banner-title">NIGHT MODE ACTIVE</strong>
+                        <span class="night-banner-desc">Low-light detection engaged: Adaptive Gamma &amp; CLAHE contrast enhancement + Dual-headlight pair detection active on dark corridors.</span>
+                    </div>
+                </div>
+                <div class="night-banner-right">
+                    <span class="night-banner-status-tag">CV LOW-LIGHT ENHANCED</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flashing Emergency Alert Banner (Visible when emergency override is active) -->
+        <div class="emergency-alert-banner" id="emergencyAlertBanner" style="display: none;">
+            <div class="emergency-alert-content">
+                <div class="emergency-alert-left">
+                    <span class="emergency-siren-icon">🚨</span>
+                    <div class="emergency-alert-text">
+                        <strong class="emergency-alert-title" id="emergencyAlertTitle">EMERGENCY PRIORITY ACTIVE</strong>
+                        <span class="emergency-alert-desc" id="emergencyAlertDesc">Immediate priority green granted. Cycle timing adapted without modifying real vehicle counts.</span>
+                    </div>
+                </div>
+                <div class="emergency-alert-right">
+                    <button type="button" class="btn btn-clear-emergency-banner" id="btnClearEmergencyBanner" onclick="clearEmergencySimulation()">
+                        ✕ Clear Emergency
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible How It Works Strip -->
+        <section class="how-it-works-card" id="howItWorksSection">
+            <button type="button" class="how-it-works-toggle" id="btnToggleHowItWorks" aria-expanded="true" title="Toggle How It Works guide">
+                <div class="toggle-header-left">
+                    <span class="hiw-badge-icon">💡</span>
+                    <span class="hiw-title">How It Works — Autonomous 3-Step Traffic Optimization</span>
+                </div>
+                <span class="hiw-toggle-arrow" id="hiwToggleArrow">▲</span>
+            </button>
+            <div class="how-it-works-content" id="howItWorksContent">
+                <div class="how-it-works-grid">
+                    <div class="hiw-step">
+                        <div class="step-num-badge">1</div>
+                        <div class="step-body">
+                            <h4 class="step-title">Upload Camera Feeds</h4>
+                            <p class="step-desc">Upload a photo or video for each road, then click Analyze Traffic.</p>
+                        </div>
+                    </div>
+                    <div class="hiw-step">
+                        <div class="step-num-badge">2</div>
+                        <div class="step-body">
+                            <h4 class="step-title">AI Vehicle Detection</h4>
+                            <p class="step-desc">YOLOv8 + OpenCV measure vehicle density with auto night-mode, CLAHE, and low-light headlight pairing.</p>
+                        </div>
+                    </div>
+                    <div class="hiw-step">
+                        <div class="step-num-badge">3</div>
+                        <div class="step-body">
+                            <h4 class="step-title">Adaptive Signal Timing</h4>
+                            <p class="step-desc">Signals receive green time in exact proportion to traffic density (120s cycle), reducing waiting time compared with fixed timers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Action / Simulation Bar -->
+        <section class="action-bar-card" id="actionBarSection">
+            <div class="action-bar-left">
+                <div class="bar-tag">CONTROL PANEL</div>
+                <div class="mode-indicator" id="currentModeIndicator">
+                    Current Mode: <strong id="modeName">Default fixed timer (no data yet)</strong>
+                    <span class="mode-explainer" id="modeExplainer">(Signals on equal 30s timers awaiting uploads)</span>
+                </div>
+                <div class="last-sync-text" id="lastSyncTime">Last updated: Just now</div>
+            </div>
+            <div class="action-bar-right">
+                <div class="control-btn-item">
+                    <button type="button" class="btn btn-primary" id="btnAnalyzeTraffic" title="Upload and analyze files from the 4 cards below">
+                        <span class="btn-icon">🔍</span> Analyze Traffic
+                    </button>
+                    <span class="btn-subtext">Detect vehicles from uploaded files</span>
+                </div>
+
+                <div class="control-btn-item">
+                    <button type="button" class="btn btn-reset" id="btnReset" title="Reset dashboard to initial default state">
+                        <span class="btn-icon">🔄</span> Reset
+                    </button>
+                    <span class="btn-subtext">Restart signal state machine</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collapsed Test Tools Section (Requirement B7) -->
+        <details class="test-tools-details" id="testToolsDetails">
+            <summary class="test-tools-summary">
+                <span class="test-tools-icon">🧪</span>
+                <span class="test-tools-title">Test tools (random data, for testing only)</span>
+                <span class="test-tools-chevron">▼</span>
+            </summary>
+            <div class="test-tools-body">
+                <div class="test-tools-bar">
+                    <div class="control-btn-item">
+                        <button type="button" class="btn btn-secondary" id="btnLoadSamples" title="Load synthetic sample images for all 4 approaches">
+                            <span class="btn-icon">📁</span> Load Sample Roads
+                        </button>
+                        <span class="btn-subtext">Reset to standard test images</span>
+                    </div>
+
+                    <div class="lighting-select-wrapper" title="Select simulated environmental lighting condition">
+                        <label for="lightingSimSelect" class="lighting-select-label">Lighting:</label>
+                        <select class="form-select lighting-select" id="lightingSimSelect">
+                            <option value="random" selected>🎲 Random (Whole Junction)</option>
+                            <option value="mixed">🔀 Mixed (Per Road)</option>
+                            <option value="day">☀️ Day</option>
+                            <option value="dusk">🌆 Dusk</option>
+                            <option value="night">🌙 Night</option>
+                        </select>
+                    </div>
+
+                    <div class="control-btn-item">
+                        <button type="button" class="btn btn-simulate" id="btnSimulate" title="Generate random vehicle distribution across all roads with selected lighting">
+                            <span class="btn-icon">⚡</span> Run Simulation
+                        </button>
+                        <span class="btn-subtext">Generate simulated traffic pattern</span>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Top Grid: Junction Simulation & Comparison Metrics -->
+        <div class="main-split-grid">
+            
+            <!-- Left: Interactive 4-Way Junction View -->
+            <section class="panel-card junction-panel" id="junctionPanel">
+                <div class="panel-header">
+                    <div class="panel-title-group">
+                        <span class="panel-icon">🗺️</span>
+                        <h2 class="panel-title">Real-Time 4-Way Junction View</h2>
+                    </div>
+                    <div class="service-order-pill">
+                        <span class="pill-label">Service Sequence:</span>
+                        <span class="pill-sequence" id="serviceOrderSequence">EAST &rarr; NORTH &rarr; SOUTH &rarr; WEST</span>
+                    </div>
+                </div>
+
+                <!-- 4-Way Intersection Visualizer -->
+                <div class="junction-viewport" id="junctionViewport">
+                    
+                    <!-- North Road (Top) -->
+                    <div class="approach-lane approach-north" id="approachNorth">
+                        <div class="lane-label">NORTH APPROACH</div>
+                        <div class="signal-housing" id="signalNorth">
+                            <div class="light-bulb bulb-red active" id="bulbNorthRed"></div>
+                            <div class="light-bulb bulb-yellow" id="bulbNorthYellow"></div>
+                            <div class="light-bulb bulb-green" id="bulbNorthGreen"></div>
+                            <div class="countdown-badge" id="countdownNorth">--</div>
+                        </div>
+                        <div class="lane-road-surface">
+                            <div class="lane-marking-dashed"></div>
+                            <div class="road-cars-queue" id="queueNorth"></div>
+                        </div>
+                    </div>
+
+                    <!-- West Road (Left) -->
+                    <div class="approach-lane approach-west" id="approachWest">
+                        <div class="lane-label">WEST APPROACH</div>
+                        <div class="signal-housing" id="signalWest">
+                            <div class="light-bulb bulb-red active" id="bulbWestRed"></div>
+                            <div class="light-bulb bulb-yellow" id="bulbWestYellow"></div>
+                            <div class="light-bulb bulb-green" id="bulbWestGreen"></div>
+                            <div class="countdown-badge" id="countdownWest">--</div>
+                        </div>
+                        <div class="lane-road-surface">
+                            <div class="lane-marking-dashed horizontal"></div>
+                            <div class="road-cars-queue" id="queueWest"></div>
+                        </div>
+                    </div>
+
+                    <!-- Center Junction Crossing -->
+                    <div class="junction-intersection-box" id="junctionCenterBox">
+                        <div class="crosswalk-stripes crosswalk-top"></div>
+                        <div class="crosswalk-stripes crosswalk-bottom"></div>
+                        <div class="crosswalk-stripes crosswalk-left"></div>
+                        <div class="crosswalk-stripes crosswalk-right"></div>
+                        
+                        <div class="center-radar-display">
+                            <div class="radar-sweep"></div>
+                            <div class="center-active-road-hud" id="centerActiveRoadHUD">
+                                <span class="active-badge-tag">ACTIVE ROAD</span>
+                                <span class="active-road-name" id="centerActiveRoadName">EAST</span>
+                                <span class="active-timer-display" id="centerActiveTimer">--s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- East Road (Right) -->
+                    <div class="approach-lane approach-east" id="approachEast">
+                        <div class="signal-housing" id="signalEast">
+                            <div class="light-bulb bulb-red" id="bulbEastRed"></div>
+                            <div class="light-bulb bulb-yellow" id="bulbEastYellow"></div>
+                            <div class="light-bulb bulb-green active" id="bulbEastGreen"></div>
+                            <div class="countdown-badge active" id="countdownEast">--</div>
+                        </div>
+                        <div class="lane-label">EAST APPROACH</div>
+                        <div class="lane-road-surface">
+                            <div class="lane-marking-dashed horizontal"></div>
+                            <div class="road-cars-queue" id="queueEast"></div>
+                        </div>
+                    </div>
+
+                    <!-- South Road (Bottom) -->
+                    <div class="approach-lane approach-south" id="approachSouth">
+                        <div class="lane-road-surface">
+                            <div class="lane-marking-dashed"></div>
+                            <div class="road-cars-queue" id="queueSouth"></div>
+                        </div>
+                        <div class="signal-housing" id="signalSouth">
+                            <div class="light-bulb bulb-red active" id="bulbSouthRed"></div>
+                            <div class="light-bulb bulb-yellow" id="bulbSouthYellow"></div>
+                            <div class="light-bulb bulb-green" id="bulbSouthGreen"></div>
+                            <div class="countdown-badge" id="countdownSouth">--</div>
+                        </div>
+                        <div class="lane-label">SOUTH APPROACH</div>
+                    </div>
+
+                </div>
+
+                <!-- Junction Phase Control Info -->
+                <div class="junction-footer-bar">
+                    <div class="phase-info-item">
+                        <span class="dot-legend dot-green"></span>
+                        <span>Green: Dynamic Density Allocation</span>
+                    </div>
+                    <div class="phase-info-item">
+                        <span class="dot-legend dot-yellow"></span>
+                        <span>Yellow: 3-second Transition Safety</span>
+                    </div>
+                    <div class="phase-info-item">
+                        <span class="dot-legend dot-red"></span>
+                        <span>Red: Stopped Approaches</span>
+                    </div>
+                </div>
+
+                <!-- Signal Phase Timeline Bar -->
+                <div class="signal-timeline-wrapper" id="signalTimelineSection">
+                    <div class="timeline-header-bar">
+                        <span class="timeline-label">SIGNAL PHASE TIMELINE (120s CYCLE)</span>
+                        <span class="timeline-active-info" id="timelineActiveInfo">Active: EAST, 56s left of 56s</span>
+                    </div>
+                    <div class="signal-timeline-bar" id="signalTimelineBar">
+                        <!-- Segments dynamically rendered by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right: Fixed vs Adaptive Comparison & Analytics -->
+            <div class="right-metrics-column">
+                
+                <!-- Fixed vs Adaptive Comparison Panel -->
+                <section class="panel-card comparison-panel" id="comparisonPanel">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <span class="panel-icon">⚖️</span>
+                            <h2 class="panel-title">Fixed Timer (30s) vs Adaptive AI Optimization</h2>
+                        </div>
+                        <span class="badge-saving" id="savingsBadge">-- Less Delay</span>
+                    </div>
+
+                    <div class="comparison-stats-grid">
+                        <div class="stat-card stat-fixed">
+                            <div class="stat-meta">BASELINE TRADITIONAL</div>
+                            <div class="stat-name">Fixed 30s Timer</div>
+                            <div class="stat-value" id="valFixedWait">70.8s</div>
+                            <div class="stat-unit">Avg. Vehicle Delay</div>
+                            <div class="stat-sub" id="fixedQueueNote">Queue spillover on dense roads</div>
+                        </div>
+
+                        <div class="stat-card stat-adaptive">
+                            <div class="stat-meta">AI-POWERED ADAPTIVE</div>
+                            <div class="stat-name">Density-Based Dynamic</div>
+                            <div class="stat-value" id="valAdaptiveWait">39.8s</div>
+                            <div class="stat-unit">Avg. Vehicle Delay</div>
+                            <div class="stat-sub highlight-success" id="adaptiveEfficiencyNote">31.0s Saved per Vehicle</div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-row">
+                        <div class="kpi-item">
+                            <span class="kpi-label">Congestion Index (Fixed)</span>
+                            <span class="kpi-val text-red" id="kpiCongestionFixed">2.36x</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-label">Congestion Index (Adaptive)</span>
+                            <span class="kpi-val text-green" id="kpiCongestionAdaptive">1.33x</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-label">Overall Delay Reduction</span>
+                            <span class="kpi-val text-cyan" id="kpiReductionPct">43.8%</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar Visualization -->
+                    <div class="efficiency-bar-container">
+                        <div class="bar-label-group">
+                            <span>System Clearance Efficiency</span>
+                            <span id="efficiencyPctLabel">84% Optimal</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="efficiencyProgressBar" style="width: 84%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="model-estimate-disclaimer">
+                        ℹ️ <em>Wait times are estimates from a simplified queue model, not measured values.</em>
+                    </div>
+                </section>
+
+                <!-- Chart.js Analytics Grid -->
+                <section class="panel-card charts-panel" id="chartsPanel">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <span class="panel-icon">📊</span>
+                            <h2 class="panel-title">Junction Analytics &amp; Allocation</h2>
+                        </div>
+                    </div>
+                    <div class="charts-grid">
+                        <div class="chart-box">
+                            <h3 class="chart-title">Vehicle Density by Road</h3>
+                            <div class="canvas-container">
+                                <canvas id="vehiclesChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-box">
+                            <h3 class="chart-title">Green Light Allocation (Seconds)</h3>
+                            <div class="canvas-container" style="height: 260px;">
+                                <canvas id="timingsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- Detection Accuracy Mode Panel -->
+        <section class="panel-card accuracy-mode-panel" id="accuracyModePanel">
+            <div class="panel-header">
+                <div class="panel-title-group">
+                    <span class="panel-icon">🛡️</span>
+                    <div>
+                        <h2 class="panel-title">Detection Accuracy &amp; Vision Pipeline Telemetry</h2>
+                        <span class="panel-caption">Adaptive pipeline status: Standard Vision, Low-Light Enhancement (CLAHE + Gamma), or Night Headlight Detection</span>
+                    </div>
+                </div>
+                <div class="accuracy-summary-pill" id="accuracySummaryPill">
+                    <span class="pulse-dot"></span>
+                    <span id="accuracySummaryText">Multi-Spectral CV Active</span>
+                </div>
+            </div>
+            
+            <div class="accuracy-roads-grid">
+                <!-- North Corridor Status -->
+                <div class="accuracy-road-card" id="accuracyCardNorth">
+                    <div class="acc-card-top">
+                        <span class="acc-road-name">NORTH APPROACH</span>
+                        <span class="acc-lighting-tag tag-day" id="accLightingNorth">☀️ DAY</span>
+                    </div>
+                    <div class="acc-pipeline-name" id="accPipelineNorth">Standard Vision Pipeline</div>
+                    <div class="acc-brightness-bar">
+                        <div class="acc-bar-label">Brightness: <strong id="accBrightValNorth">146.1</strong>/255</div>
+                        <div class="acc-meter-track">
+                            <div class="acc-meter-fill meter-day" id="accMeterNorth" style="width: 57%;"></div>
+                        </div>
+                    </div>
+                    <div class="acc-desc" id="accDescNorth">Daylight scene: Standard vision pipeline using contrast silhouette and contour area filtering.</div>
+                </div>
+
+                <!-- South Corridor Status -->
+                <div class="accuracy-road-card" id="accuracyCardSouth">
+                    <div class="acc-card-top">
+                        <span class="acc-road-name">SOUTH APPROACH</span>
+                        <span class="acc-lighting-tag tag-day" id="accLightingSouth">☀️ DAY</span>
+                    </div>
+                    <div class="acc-pipeline-name" id="accPipelineSouth">Standard Vision Pipeline</div>
+                    <div class="acc-brightness-bar">
+                        <div class="acc-bar-label">Brightness: <strong id="accBrightValSouth">145.2</strong>/255</div>
+                        <div class="acc-meter-track">
+                            <div class="acc-meter-fill meter-day" id="accMeterSouth" style="width: 57%;"></div>
+                        </div>
+                    </div>
+                    <div class="acc-desc" id="accDescSouth">Daylight scene: Standard vision pipeline using contrast silhouette and contour area filtering.</div>
+                </div>
+
+                <!-- East Corridor Status -->
+                <div class="accuracy-road-card" id="accuracyCardEast">
+                    <div class="acc-card-top">
+                        <span class="acc-road-name">EAST APPROACH</span>
+                        <span class="acc-lighting-tag tag-day" id="accLightingEast">☀️ DAY</span>
+                    </div>
+                    <div class="acc-pipeline-name" id="accPipelineEast">Standard Vision Pipeline</div>
+                    <div class="acc-brightness-bar">
+                        <div class="acc-bar-label">Brightness: <strong id="accBrightValEast">146.0</strong>/255</div>
+                        <div class="acc-meter-track">
+                            <div class="acc-meter-fill meter-day" id="accMeterEast" style="width: 57%;"></div>
+                        </div>
+                    </div>
+                    <div class="acc-desc" id="accDescEast">Daylight scene: Standard vision pipeline using contrast silhouette and contour area filtering.</div>
+                </div>
+
+                <!-- West Corridor Status -->
+                <div class="accuracy-road-card" id="accuracyCardWest">
+                    <div class="acc-card-top">
+                        <span class="acc-road-name">WEST APPROACH</span>
+                        <span class="acc-lighting-tag tag-day" id="accLightingWest">☀️ DAY</span>
+                    </div>
+                    <div class="acc-pipeline-name" id="accPipelineWest">Standard Vision Pipeline</div>
+                    <div class="acc-brightness-bar">
+                        <div class="acc-bar-label">Brightness: <strong id="accBrightValWest">145.2</strong>/255</div>
+                        <div class="acc-meter-track">
+                            <div class="acc-meter-fill meter-day" id="accMeterWest" style="width: 57%;"></div>
+                        </div>
+                    </div>
+                    <div class="acc-desc" id="accDescWest">Daylight scene: Standard vision pipeline using contrast silhouette and contour area filtering.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Four Road Approach Cards (North, South, East, West) -->
+        <section class="roads-section" id="roadsSection">
+            <div class="section-title-bar">
+                <div class="title-with-pill">
+                    <h2 class="section-heading">Approach Monitoring &amp; Media Uploads</h2>
+                    <span class="section-badge">4 Ingress Corridors</span>
+                </div>
+                <div class="upload-tip">Upload images (.jpg .jpeg .png .bmp .webp .avif) or videos (.mp4 .avi .mov .webm) per road to compute custom density</div>
+            </div>
+
+            <!-- Detection Settings Panel -->
+            <div class="detection-settings-card" id="detectionSettingsPanel">
+                <div class="det-settings-info">
+                    <span class="det-icon">🎯</span>
+                    <div>
+                        <div class="det-title">Detection Settings (YOLOv8 Engine)</div>
+                        <div class="det-subtitle">Tune vehicle confidence threshold (0.10 – 0.70) and model architecture for analysis</div>
+                    </div>
+                </div>
+                <div class="det-controls-flex">
+                    <div class="det-model-group">
+                        <label for="modelSelect" class="det-model-label">Model Architecture:</label>
+                        <select id="modelSelect" class="form-select det-model-select">
+                            <option value="yolov8s" selected>YOLOv8s (Default / Recommended)</option>
+                            <option value="yolov8n">YOLOv8n (Fast / Lightweight)</option>
+                            <option value="yolov8m">YOLOv8m (High Accuracy)</option>
+                        </select>
+                    </div>
+                    <div class="det-slider-group">
+                        <label for="confSlider" class="det-slider-label">Confidence Threshold:</label>
+                        <input type="range" class="form-range det-range-slider" id="confSlider" min="0.10" max="0.70" step="0.05" value="0.30" title="Adjust confidence threshold">
+                        <span class="det-slider-val-badge" id="confSliderVal">0.30</span>
+                        <span class="det-hint">(Applies on next Analyze Traffic)</span>
+                    </div>
+                    <div class="det-sweep-group">
+                        <button type="button" class="btn btn-secondary btn-confidence-sweep" id="btnConfidenceSweep" title="Run confidence sweep across 0.20, 0.30, 0.40, 0.50">
+                            <span>🔍</span> Run confidence sweep
+                        </button>
+                    </div>
+                </div>
+                <!-- Confidence Sweep Results Table Container (Requirement C14) -->
+                <div class="confidence-sweep-results" id="confidenceSweepResults" style="display: none;">
+                    <div class="sweep-header-row">
+                        <h4 class="sweep-title">Confidence Sweep Analysis (0.20 – 0.50)</h4>
+                        <span class="sweep-model-tag" id="sweepModelTag">YOLOv8s</span>
+                    </div>
+                    <div class="sweep-table-wrapper">
+                        <table class="sweep-table" id="sweepTable">
+                            <thead>
+                                <tr>
+                                    <th>Confidence</th>
+                                    <th>Total Vehicles</th>
+                                    <th>North (Det / Err)</th>
+                                    <th>South (Det / Err)</th>
+                                    <th>East (Det / Err)</th>
+                                    <th>West (Det / Err)</th>
+                                    <th>MAE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sweepTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form wraps all file inputs -->
+            <form id="uploadTrafficForm" enctype="multipart/form-data">
+                <div class="road-cards-grid">
+                    
+                    <!-- North Card -->
+                    <div class="road-card" id="cardNorth">
+                        <div class="road-card-header">
+                            <!-- Col 1: Compass Badge -->
+                            <span class="compass-badge badge-north">N</span>
+                            <!-- Col 2: Title + Corridor stacked -->
+                            <div class="card-header-title-col">
+                                <h3 class="road-title">North Approach</h3>
+                                <span class="corridor-subtitle" title="Corridor N-101">Corridor N-101</span>
+                            </div>
+                            <!-- Col 3: Lighting Badge -->
+                            <div class="card-header-lighting-col">
+                                <span class="lighting-badge lighting-day" id="lightingBadgeNorth">
+                                    <span class="badge-icon">☀️</span> <span class="badge-text" id="lightingTextNorth">Day (146)</span>
+                                </span>
+                            </div>
+                            <!-- Row 2: density + engine + emergency + sample badges -->
+                            <div class="card-header-row3">
+                                <span class="emergency-badge-tag" id="emergBadgeNorth" style="display: none;">🚨 EMERGENCY</span>
+                                <span class="test-data-badge-tag" id="testDataBadgeNorth" style="display: none;">TEST DATA</span>
+                                <span class="previous-badge-tag" id="previousBadgeNorth" style="display: none;">Previous</span>
+                                <span class="no-data-badge-tag" id="noDataBadgeNorth" style="display: none;">No data</span>
+                                <span class="sample-badge-tag" id="sampleBadgeNorth" style="display: none;">SAMPLE</span>
+                                <span class="density-badge badge-medium" id="densityBadgeNorth">Medium</span>
+                                <span class="engine-badge-tag" id="engineBadgeNorth">Engine: YOLOv8n</span>
+                            </div>
+                        </div>
+
+                        <div class="upload-failed-banner" id="uploadFailedNorth" style="display: none;"></div>
+                        <div class="duplicate-note-banner" id="duplicateNoteNorth" style="display: none;"></div>
+                        <div class="upload-warning-banner" id="uploadWarningNorth" style="display: none;">
+                            ⚠️ Very few vehicles detected - try lowering the confidence threshold or check the image.
+                        </div>
+
+                        <div class="road-metrics-row">
+                            <div class="road-metric-col">
+                                <span class="m-title">Vehicles</span>
+                                <span class="m-val" id="countValNorth">18</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Green Time</span>
+                                <span class="m-val text-green" id="greenValNorth">35s</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Traffic Share</span>
+                                <span class="m-val text-blue" id="shareValNorth">28.1%</span>
+                            </div>
+                        </div>
+
+                        <!-- Vision Control & Toggle Bar -->
+                        <div class="vision-view-control-bar" id="viewControlNorth">
+                            <span class="view-status-tag" id="viewStatusNorth">Annotated Feed</span>
+                            <button type="button" class="btn-toggle-view" id="btnToggleNorth" onclick="toggleVisionView('north')" title="Toggle between single feed and side-by-side original/enhanced comparison">
+                                <span class="toggle-icon">🌓</span> <span id="toggleTextNorth">Compare Original / Enhanced</span>
+                            </button>
+                        </div>
+
+                        <div class="video-stats-tag" id="videoStatsNorth" style="display: none;">
+                            📹 Video Feed &bull; Avg: <strong id="videoAvgNorth">0</strong> | Max: <strong id="videoMaxNorth">0</strong>
+                        </div>
+
+                        <!-- Vision Preview Frames (Single view & Side-by-side split view) -->
+                        <div class="detection-preview-container" id="previewContainerNorth">
+                            <!-- Single View -->
+                            <div class="preview-single-view" id="singleViewNorth" onclick="openImageModal('imgNorth')" title="Click to view full-resolution image">
+                                <img src="/static/samples/sample_north.jpg" alt="North Detection Feed" id="imgNorth" class="feed-img">
+                                <div class="feed-overlay-tag" id="feedTagNorth">AI VISION FEED (CLICK TO EXPAND)</div>
+                            </div>
+                            <!-- Side-by-Side Comparison View -->
+                            <div class="preview-split-view" id="splitViewNorth" style="display: none;">
+                                <div class="split-pane" onclick="openCustomImageModal('imgNorthOrig', 'North - Original Low-Light Feed')" title="Click to expand Original">
+                                    <div class="split-label">ORIGINAL (RAW)</div>
+                                    <img src="/static/samples/sample_north.jpg" alt="North Original Feed" id="imgNorthOrig" class="split-img">
+                                </div>
+                                <div class="split-pane" onclick="openCustomImageModal('imgNorthEnh', 'North - Enhanced Vision Feed')" title="Click to expand Enhanced">
+                                    <div class="split-label">ENHANCED (CLAHE)</div>
+                                    <img src="/static/samples/sample_north.jpg" alt="North Enhanced Feed" id="imgNorthEnh" class="split-img">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actual Count Input for Ground Truth Tracking -->
+                        <div class="actual-count-group">
+                            <label for="actualNorth" class="actual-count-label">Actual count (optional):</label>
+                            <input type="number" id="actualNorth" name="actual_north" min="0" max="999" class="actual-count-input" placeholder="e.g. 18" title="Ground truth vehicle count for accuracy tracking">
+                        </div>
+                        <div class="accuracy-feedback-tag" id="accuracyFeedbackNorth" style="display: none;"></div>
+
+                        <!-- Per-Road Lighting Override (Requirement C12) -->
+                        <div class="lighting-override-group">
+                            <label for="overrideNorth" class="override-label">Lighting Override:</label>
+                            <select name="lighting_north" id="overrideNorth" class="form-select road-lighting-select">
+                                <option value="auto" selected>Auto</option>
+                                <option value="day">Day</option>
+                                <option value="dusk">Dusk</option>
+                                <option value="night">Night</option>
+                            </select>
+                        </div>
+
+                        <!-- File Input & Selection Status (Requirement C11) -->
+                        <div class="upload-control-group">
+                            <label for="fileNorth" class="file-label">
+                                <span class="upload-icon">📷</span>
+                                <span class="file-text" id="fileTextNorth">Choose road image/video</span>
+                            </label>
+                            <input type="file" name="north" id="fileNorth" class="file-input" accept="image/*,video/*">
+                            <div class="file-status-slot">
+                                <div class="file-selection-badge" id="fileStatusNorth" style="display: none;">Selected, not analyzed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- South Card -->
+                    <div class="road-card" id="cardSouth">
+                        <div class="road-card-header">
+                            <span class="compass-badge badge-south">S</span>
+                            <div class="card-header-title-col">
+                                <h3 class="road-title">South Approach</h3>
+                                <span class="corridor-subtitle" title="Corridor S-204">Corridor S-204</span>
+                            </div>
+                            <div class="card-header-lighting-col">
+                                <span class="lighting-badge lighting-day" id="lightingBadgeSouth">
+                                    <span class="badge-icon">☀️</span> <span class="badge-text" id="lightingTextSouth">Day (145)</span>
+                                </span>
+                            </div>
+                            <div class="card-header-row3">
+                                <span class="emergency-badge-tag" id="emergBadgeSouth" style="display: none;">🚨 EMERGENCY</span>
+                                <span class="test-data-badge-tag" id="testDataBadgeSouth" style="display: none;">TEST DATA</span>
+                                <span class="previous-badge-tag" id="previousBadgeSouth" style="display: none;">Previous</span>
+                                <span class="no-data-badge-tag" id="noDataBadgeSouth" style="display: none;">No data</span>
+                                <span class="sample-badge-tag" id="sampleBadgeSouth" style="display: none;">SAMPLE</span>
+                                <span class="density-badge badge-low" id="densityBadgeSouth">Low</span>
+                                <span class="engine-badge-tag" id="engineBadgeSouth">Engine: YOLOv8n</span>
+                            </div>
+                        </div>
+
+                        <div class="upload-failed-banner" id="uploadFailedSouth" style="display: none;"></div>
+                        <div class="duplicate-note-banner" id="duplicateNoteSouth" style="display: none;"></div>
+                        <div class="upload-warning-banner" id="uploadWarningSouth" style="display: none;">
+                            ⚠️ Very few vehicles detected - try lowering the confidence threshold or check the image.
+                        </div>
+
+                        <div class="road-metrics-row">
+                            <div class="road-metric-col">
+                                <span class="m-title">Vehicles</span>
+                                <span class="m-val" id="countValSouth">10</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Green Time</span>
+                                <span class="m-val text-green" id="greenValSouth">19s</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Traffic Share</span>
+                                <span class="m-val text-blue" id="shareValSouth">15.6%</span>
+                            </div>
+                        </div>
+
+                        <div class="vision-view-control-bar" id="viewControlSouth">
+                            <span class="view-status-tag" id="viewStatusSouth">Annotated Feed</span>
+                            <button type="button" class="btn-toggle-view" id="btnToggleSouth" onclick="toggleVisionView('south')" title="Toggle between single feed and side-by-side original/enhanced comparison">
+                                <span class="toggle-icon">🌓</span> <span id="toggleTextSouth">Compare Original / Enhanced</span>
+                            </button>
+                        </div>
+
+                        <div class="video-stats-tag" id="videoStatsSouth" style="display: none;">
+                            📹 Video Feed &bull; Avg: <strong id="videoAvgSouth">0</strong> | Max: <strong id="videoMaxSouth">0</strong>
+                        </div>
+
+                        <div class="detection-preview-container" id="previewContainerSouth">
+                            <div class="preview-single-view" id="singleViewSouth" onclick="openImageModal('imgSouth')" title="Click to view full-resolution image">
+                                <img src="/static/samples/sample_south.jpg" alt="South Detection Feed" id="imgSouth" class="feed-img">
+                                <div class="feed-overlay-tag" id="feedTagSouth">AI VISION FEED (CLICK TO EXPAND)</div>
+                            </div>
+                            <div class="preview-split-view" id="splitViewSouth" style="display: none;">
+                                <div class="split-pane" onclick="openCustomImageModal('imgSouthOrig', 'South - Original Low-Light Feed')" title="Click to expand Original">
+                                    <div class="split-label">ORIGINAL (RAW)</div>
+                                    <img src="/static/samples/sample_south.jpg" alt="South Original Feed" id="imgSouthOrig" class="split-img">
+                                </div>
+                                <div class="split-pane" onclick="openCustomImageModal('imgSouthEnh', 'South - Enhanced Vision Feed')" title="Click to expand Enhanced">
+                                    <div class="split-label">ENHANCED (CLAHE)</div>
+                                    <img src="/static/samples/sample_south.jpg" alt="South Enhanced Feed" id="imgSouthEnh" class="split-img">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actual Count Input for Ground Truth Tracking -->
+                        <div class="actual-count-group">
+                            <label for="actualSouth" class="actual-count-label">Actual count (optional):</label>
+                            <input type="number" id="actualSouth" name="actual_south" min="0" max="999" class="actual-count-input" placeholder="e.g. 7" title="Ground truth vehicle count for accuracy tracking">
+                        </div>
+                        <div class="accuracy-feedback-tag" id="accuracyFeedbackSouth" style="display: none;"></div>
+
+                        <!-- Per-Road Lighting Override (Requirement C12) -->
+                        <div class="lighting-override-group">
+                            <label for="overrideSouth" class="override-label">Lighting Override:</label>
+                            <select name="lighting_south" id="overrideSouth" class="form-select road-lighting-select">
+                                <option value="auto" selected>Auto</option>
+                                <option value="day">Day</option>
+                                <option value="dusk">Dusk</option>
+                                <option value="night">Night</option>
+                            </select>
+                        </div>
+
+                        <div class="upload-control-group">
+                            <label for="fileSouth" class="file-label">
+                                <span class="upload-icon">📷</span>
+                                <span class="file-text" id="fileTextSouth">Choose road image/video</span>
+                            </label>
+                            <input type="file" name="south" id="fileSouth" class="file-input" accept="image/*,video/*">
+                            <div class="file-status-slot">
+                                <div class="file-selection-badge" id="fileStatusSouth" style="display: none;">Selected, not analyzed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- East Card -->
+                    <div class="road-card" id="cardEast">
+                        <div class="road-card-header">
+                            <span class="compass-badge badge-east">E</span>
+                            <div class="card-header-title-col">
+                                <h3 class="road-title">East Approach</h3>
+                                <span class="corridor-subtitle" title="Expressway E-405">Expressway E-405</span>
+                            </div>
+                            <div class="card-header-lighting-col">
+                                <span class="lighting-badge lighting-day" id="lightingBadgeEast">
+                                    <span class="badge-icon">☀️</span> <span class="badge-text" id="lightingTextEast">Day (146)</span>
+                                </span>
+                            </div>
+                            <div class="card-header-row3">
+                                <span class="emergency-badge-tag" id="emergBadgeEast" style="display: none;">🚨 EMERGENCY</span>
+                                <span class="test-data-badge-tag" id="testDataBadgeEast" style="display: none;">TEST DATA</span>
+                                <span class="previous-badge-tag" id="previousBadgeEast" style="display: none;">Previous</span>
+                                <span class="no-data-badge-tag" id="noDataBadgeEast" style="display: none;">No data</span>
+                                <span class="sample-badge-tag" id="sampleBadgeEast" style="display: none;">SAMPLE</span>
+                                <span class="density-badge badge-high" id="densityBadgeEast">High</span>
+                                <span class="engine-badge-tag" id="engineBadgeEast">Engine: YOLOv8n</span>
+                            </div>
+                        </div>
+
+                        <div class="upload-failed-banner" id="uploadFailedEast" style="display: none;"></div>
+                        <div class="duplicate-note-banner" id="duplicateNoteEast" style="display: none;"></div>
+                        <div class="upload-warning-banner" id="uploadWarningEast" style="display: none;">
+                            ⚠️ Very few vehicles detected - try lowering the confidence threshold or check the image.
+                        </div>
+
+                        <div class="road-metrics-row">
+                            <div class="road-metric-col">
+                                <span class="m-title">Vehicles</span>
+                                <span class="m-val" id="countValEast">30</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Green Time</span>
+                                <span class="m-val text-green" id="greenValEast">56s</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Traffic Share</span>
+                                <span class="m-val text-blue" id="shareValEast">46.9%</span>
+                            </div>
+                        </div>
+
+                        <div class="vision-view-control-bar" id="viewControlEast">
+                            <span class="view-status-tag" id="viewStatusEast">Annotated Feed</span>
+                            <button type="button" class="btn-toggle-view" id="btnToggleEast" onclick="toggleVisionView('east')" title="Toggle between single feed and side-by-side original/enhanced comparison">
+                                <span class="toggle-icon">🌓</span> <span id="toggleTextEast">Compare Original / Enhanced</span>
+                            </button>
+                        </div>
+
+                        <div class="video-stats-tag" id="videoStatsEast" style="display: none;">
+                            📹 Video Feed &bull; Avg: <strong id="videoAvgEast">0</strong> | Max: <strong id="videoMaxEast">0</strong>
+                        </div>
+
+                        <div class="detection-preview-container" id="previewContainerEast">
+                            <div class="preview-single-view" id="singleViewEast" onclick="openImageModal('imgEast')" title="Click to view full-resolution image">
+                                <img src="/static/samples/sample_east.jpg" alt="East Detection Feed" id="imgEast" class="feed-img">
+                                <div class="feed-overlay-tag" id="feedTagEast">AI VISION FEED (CLICK TO EXPAND)</div>
+                            </div>
+                            <div class="preview-split-view" id="splitViewEast" style="display: none;">
+                                <div class="split-pane" onclick="openCustomImageModal('imgEastOrig', 'East - Original Low-Light Feed')" title="Click to expand Original">
+                                    <div class="split-label">ORIGINAL (RAW)</div>
+                                    <img src="/static/samples/sample_east.jpg" alt="East Original Feed" id="imgEastOrig" class="split-img">
+                                </div>
+                                <div class="split-pane" onclick="openCustomImageModal('imgEastEnh', 'East - Enhanced Vision Feed')" title="Click to expand Enhanced">
+                                    <div class="split-label">ENHANCED (CLAHE)</div>
+                                    <img src="/static/samples/sample_east.jpg" alt="East Enhanced Feed" id="imgEastEnh" class="split-img">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actual Count Input for Ground Truth Tracking -->
+                        <div class="actual-count-group">
+                            <label for="actualEast" class="actual-count-label">Actual count (optional):</label>
+                            <input type="number" id="actualEast" name="actual_east" min="0" max="999" class="actual-count-input" placeholder="e.g. 30" title="Ground truth vehicle count for accuracy tracking">
+                        </div>
+                        <div class="accuracy-feedback-tag" id="accuracyFeedbackEast" style="display: none;"></div>
+
+                        <!-- Per-Road Lighting Override (Requirement C12) -->
+                        <div class="lighting-override-group">
+                            <label for="overrideEast" class="override-label">Lighting Override:</label>
+                            <select name="lighting_east" id="overrideEast" class="form-select road-lighting-select">
+                                <option value="auto" selected>Auto</option>
+                                <option value="day">Day</option>
+                                <option value="dusk">Dusk</option>
+                                <option value="night">Night</option>
+                            </select>
+                        </div>
+
+                        <div class="upload-control-group">
+                            <label for="fileEast" class="file-label">
+                                <span class="upload-icon">📷</span>
+                                <span class="file-text" id="fileTextEast">Choose road image/video</span>
+                            </label>
+                            <input type="file" name="east" id="fileEast" class="file-input" accept="image/*,video/*">
+                            <div class="file-status-slot">
+                                <div class="file-selection-badge" id="fileStatusEast" style="display: none;">Selected, not analyzed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- West Card -->
+                    <div class="road-card" id="cardWest">
+                        <div class="road-card-header">
+                            <span class="compass-badge badge-west">W</span>
+                            <div class="card-header-title-col">
+                                <h3 class="road-title">West Approach</h3>
+                                <span class="corridor-subtitle" title="Avenue W-808">Avenue W-808</span>
+                            </div>
+                            <div class="card-header-lighting-col">
+                                <span class="lighting-badge lighting-day" id="lightingBadgeWest">
+                                    <span class="badge-icon">☀️</span> <span class="badge-text" id="lightingTextWest">Day (145)</span>
+                                </span>
+                            </div>
+                            <div class="card-header-row3">
+                                <span class="emergency-badge-tag" id="emergBadgeWest" style="display: none;">🚨 EMERGENCY</span>
+                                <span class="test-data-badge-tag" id="testDataBadgeWest" style="display: none;">TEST DATA</span>
+                                <span class="previous-badge-tag" id="previousBadgeWest" style="display: none;">Previous</span>
+                                <span class="no-data-badge-tag" id="noDataBadgeWest" style="display: none;">No data</span>
+                                <span class="sample-badge-tag" id="sampleBadgeWest" style="display: none;">SAMPLE</span>
+                                <span class="density-badge badge-low" id="densityBadgeWest">Low</span>
+                                <span class="engine-badge-tag" id="engineBadgeWest">Engine: YOLOv8n</span>
+                            </div>
+                        </div>
+
+                        <div class="upload-failed-banner" id="uploadFailedWest" style="display: none;"></div>
+                        <div class="duplicate-note-banner" id="duplicateNoteWest" style="display: none;"></div>
+                        <div class="upload-warning-banner" id="uploadWarningWest" style="display: none;">
+                            ⚠️ Very few vehicles detected - try lowering the confidence threshold or check the image.
+                        </div>
+
+                        <div class="road-metrics-row">
+                            <div class="road-metric-col">
+                                <span class="m-title">Vehicles</span>
+                                <span class="m-val" id="countValWest">6</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Green Time</span>
+                                <span class="m-val text-green" id="greenValWest">10s</span>
+                            </div>
+                            <div class="road-metric-col">
+                                <span class="m-title">Traffic Share</span>
+                                <span class="m-val text-blue" id="shareValWest">9.4%</span>
+                            </div>
+                        </div>
+
+                        <div class="vision-view-control-bar" id="viewControlWest">
+                            <span class="view-status-tag" id="viewStatusWest">Annotated Feed</span>
+                            <button type="button" class="btn-toggle-view" id="btnToggleWest" onclick="toggleVisionView('west')" title="Toggle between single feed and side-by-side original/enhanced comparison">
+                                <span class="toggle-icon">🌓</span> <span id="toggleTextWest">Compare Original / Enhanced</span>
+                            </button>
+                        </div>
+
+                        <div class="video-stats-tag" id="videoStatsWest" style="display: none;">
+                            📹 Video Feed &bull; Avg: <strong id="videoAvgWest">0</strong> | Max: <strong id="videoMaxWest">0</strong>
+                        </div>
+
+                        <div class="detection-preview-container" id="previewContainerWest">
+                            <div class="preview-single-view" id="singleViewWest" onclick="openImageModal('imgWest')" title="Click to view full-resolution image">
+                                <img src="/static/samples/sample_west.jpg" alt="West Detection Feed" id="imgWest" class="feed-img">
+                                <div class="feed-overlay-tag" id="feedTagWest">AI VISION FEED (CLICK TO EXPAND)</div>
+                            </div>
+                            <div class="preview-split-view" id="splitViewWest" style="display: none;">
+                                <div class="split-pane" onclick="openCustomImageModal('imgWestOrig', 'West - Original Low-Light Feed')" title="Click to expand Original">
+                                    <div class="split-label">ORIGINAL (RAW)</div>
+                                    <img src="/static/samples/sample_west.jpg" alt="West Original Feed" id="imgWestOrig" class="split-img">
+                                </div>
+                                <div class="split-pane" onclick="openCustomImageModal('imgWestEnh', 'West - Enhanced Vision Feed')" title="Click to expand Enhanced">
+                                    <div class="split-label">ENHANCED (CLAHE)</div>
+                                    <img src="/static/samples/sample_west.jpg" alt="West Enhanced Feed" id="imgWestEnh" class="split-img">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actual Count Input for Ground Truth Tracking -->
+                        <div class="actual-count-group">
+                            <label for="actualWest" class="actual-count-label">Actual count (optional):</label>
+                            <input type="number" id="actualWest" name="actual_west" min="0" max="999" class="actual-count-input" placeholder="e.g. 10" title="Ground truth vehicle count for accuracy tracking">
+                        </div>
+                        <div class="accuracy-feedback-tag" id="accuracyFeedbackWest" style="display: none;"></div>
+
+                        <!-- Per-Road Lighting Override (Requirement C12) -->
+                        <div class="lighting-override-group">
+                            <label for="overrideWest" class="override-label">Lighting Override:</label>
+                            <select name="lighting_west" id="overrideWest" class="form-select road-lighting-select">
+                                <option value="auto" selected>Auto</option>
+                                <option value="day">Day</option>
+                                <option value="dusk">Dusk</option>
+                                <option value="night">Night</option>
+                            </select>
+                        </div>
+
+                        <div class="upload-control-group">
+                            <label for="fileWest" class="file-label">
+                                <span class="upload-icon">📷</span>
+                                <span class="file-text" id="fileTextWest">Choose road image/video</span>
+                            </label>
+                            <input type="file" name="west" id="fileWest" class="file-input" accept="image/*,video/*">
+                            <div class="file-status-slot">
+                                <div class="file-selection-badge" id="fileStatusWest" style="display: none;">Selected, not analyzed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+            <!-- Ground Truth Accuracy Report Panel -->
+            <div class="panel-card accuracy-report-panel" id="accuracyReportPanel" style="margin-top: 24px;">
+                <div class="panel-header">
+                    <div class="panel-title-group">
+                        <span class="panel-icon">📊</span>
+                        <div>
+                            <h2 class="panel-title">Ground Truth Accuracy Report</h2>
+                            <span class="panel-caption">Comparing AI detection counts with ground truth actual counts</span>
+                        </div>
+                    </div>
+                    <div class="accuracy-mae-pill" id="accuracyMaePill">
+                        <span class="mae-label">MEAN ABSOLUTE ERROR:</span>
+                        <span class="mae-val font-mono" id="accuracyMaeVal">--</span>
+                    </div>
+                </div>
+                <div class="accuracy-report-body" id="accuracyReportBody">
+                    <p class="accuracy-report-placeholder" id="accuracyReportPlaceholder">
+                        💡 Enter optional <strong>Actual count</strong> values on any road card above and click <strong>Analyze Traffic</strong> to view per-road error rates and mean absolute error (MAE).
+                    </p>
+                    <div class="accuracy-report-table-wrapper" id="accuracyReportWrapper" style="display: none;">
+                        <table class="accuracy-report-table">
+                            <thead>
+                                <tr>
+                                    <th>Approach Corridor</th>
+                                    <th>AI Detected</th>
+                                    <th>Actual Ground Truth</th>
+                                    <th>Absolute Error</th>
+                                    <th>Percentage Error</th>
+                                    <th>Telemetry Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accuracyReportTableBody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance & Results Summary Panel -->
+        <section class="panel-card summary-panel" id="summaryPanel">
+            <div class="panel-header">
+                <div class="panel-title-group">
+                    <span class="panel-icon">📈</span>
+                    <h2 class="panel-title">Performance &amp; Results Summary</h2>
+                </div>
+                <span class="badge-saving" id="summaryWaitReductionBadge">--% Delay Saved</span>
+            </div>
+            <div class="summary-stats-grid">
+                <div class="summary-stat-card">
+                    <div class="summary-stat-icon">🚗</div>
+                    <div class="summary-stat-body">
+                        <div class="summary-stat-label">Total Vehicles</div>
+                        <div class="summary-stat-val" id="summaryTotalVehicles">--</div>
+                    </div>
+                </div>
+                <div class="summary-stat-card">
+                    <div class="summary-stat-icon">📊</div>
+                    <div class="summary-stat-body">
+                        <div class="summary-stat-label">Avg Vehicles / Road</div>
+                        <div class="summary-stat-val" id="summaryAvgVehicles">--</div>
+                    </div>
+                </div>
+                <div class="summary-stat-card summary-green-times-card">
+                    <div class="summary-stat-icon">🟢</div>
+                    <div class="summary-stat-body">
+                        <div class="summary-stat-label">Green Times (N / S / E / W)</div>
+                        <div class="summary-stat-val summary-green-times" id="summaryGreenTimes">-- / -- / -- / -- s</div>
+                    </div>
+                </div>
+                <div class="summary-stat-card">
+                    <div class="summary-stat-icon">⏱️</div>
+                    <div class="summary-stat-body">
+                        <div class="summary-stat-label">Fixed Timer Avg Wait</div>
+                        <div class="summary-stat-val text-red" id="summaryFixedWait">--s</div>
+                    </div>
+                </div>
+                <div class="summary-stat-card">
+                    <div class="summary-stat-icon">⚡</div>
+                    <div class="summary-stat-body">
+                        <div class="summary-stat-label">Adaptive AI Avg Wait</div>
+                        <div class="summary-stat-val text-green" id="summaryAdaptiveWait">--s</div>
+                    </div>
+                </div>
+                <div class="summary-stat-card summary-highlight">
+                    <div class="summary-stat-icon">🏆</div>
+                    <div class="summary-stat-body">
+                        <div class="summary-stat-label">Wait-Time Reduction</div>
+                        <div class="summary-stat-val text-cyan" id="summaryWaitReduction">--%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Vehicle Simulation Panel -->
+        <section class="panel-card emergency-panel" id="emergencyPanel">
+            <div class="panel-header">
+                <div class="panel-title-group">
+                    <span class="panel-icon">🚨</span>
+                    <div>
+                        <h2 class="panel-title">Emergency Vehicle Priority Simulation</h2>
+                        <span class="panel-caption">Preempts normal cycle: emergency road served first with max green (60s); remaining roads share 60s by density without changing vehicle counts</span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn btn-secondary btn-clear-emergency" id="btnClearEmergency" onclick="clearEmergencySimulation()" style="display: none;">
+                        ✕ Clear Emergency
+                    </button>
+                    <span class="emergency-status-tag" id="emergencyStatusTag">STANDBY</span>
+                </div>
+            </div>
+            <div class="emergency-buttons-row">
+                <button type="button" class="btn btn-emergency" id="btnEmergNorth" title="Trigger emergency override for North approach">
+                    <span class="btn-icon">🚨</span> NORTH Emergency
+                </button>
+                <button type="button" class="btn btn-emergency" id="btnEmergSouth" title="Trigger emergency override for South approach">
+                    <span class="btn-icon">🚨</span> SOUTH Emergency
+                </button>
+                <button type="button" class="btn btn-emergency" id="btnEmergEast" title="Trigger emergency override for East approach">
+                    <span class="btn-icon">🚨</span> EAST Emergency
+                </button>
+                <button type="button" class="btn btn-emergency" id="btnEmergWest" title="Trigger emergency override for West approach">
+                    <span class="btn-icon">🚨</span> WEST Emergency
+                </button>
+            </div>
+            <p class="emergency-note">Emergency priority acts as a dispatch flag. Vehicle counts, density levels, and traffic shares remain strictly as measured. The designated corridor receives 60s green immediately; remaining approaches share (120s − 60s = 60s) proportionally to their traffic density (min 10s). When the priority cycle concludes, normal adaptive cycling resumes automatically.</p>
+        </section>
+
+        <!-- Run History Panel -->
+        <section class="panel-card history-panel" id="historyPanel">
+            <div class="panel-header">
+                <div class="panel-title-group">
+                    <span class="panel-icon">📜</span>
+                    <div>
+                        <h2 class="panel-title">Optimization Run History</h2>
+                        <span class="panel-caption">Persisted log of the last 20 signal optimization cycles with delay trends &amp; vehicle distribution</span>
+                    </div>
+                </div>
+                <div class="history-actions-group">
+                    <label class="history-filter-toggle" title="Include Test (random data) runs in history charts">
+                        <input type="checkbox" id="chkShowTestRuns">
+                        <span>Show test runs</span>
+                    </label>
+                    <a href="/api/history/export" class="btn btn-secondary btn-sm" id="btnExportHistory" download="traffic_run_history.csv" title="Download run history as CSV">
+                        <span class="btn-icon">📥</span> Export CSV
+                    </a>
+                    <button type="button" class="btn btn-reset btn-sm" id="btnClearHistory" title="Clear all stored run history">
+                        <span class="btn-icon">🗑️</span> Clear History
+                    </button>
+                </div>
+            </div>
+
+            <!-- Run History Analytics Charts -->
+            <div class="history-charts-grid">
+                <div class="chart-box">
+                    <h3 class="chart-title">Wait-Time Delay Reduction Trend across Runs (%)</h3>
+                    <div class="canvas-container" style="height: 280px;">
+                        <canvas id="historyReductionChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <h3 class="chart-title">Vehicle Density Breakdown per Run (Vehicles by Approach)</h3>
+                    <div class="canvas-container" style="height: 280px;">
+                        <canvas id="historyCountsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Run History Table -->
+            <div class="history-table-container">
+                <table class="history-table" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Mode</th>
+                            <th>Lighting</th>
+                            <th>North</th>
+                            <th>South</th>
+                            <th>East</th>
+                            <th>West</th>
+                            <th>Total</th>
+                            <th>Green (N/S/E/W)</th>
+                            <th>Delay Reduction</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="11" class="history-empty-cell">Loading run history...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Status & Event Log Terminal -->
+        <section class="panel-card log-panel" id="logPanel">
+            <div class="panel-header">
+                <div class="panel-title-group">
+                    <span class="panel-icon">📟</span>
+                    <h2 class="panel-title">System Status &amp; Real-Time Event Log</h2>
+                </div>
+                <div class="log-actions">
+                    <button type="button" class="btn-text-action" id="btnClearLog">Clear Log</button>
+                </div>
+            </div>
+            <div class="log-terminal" id="logTerminal">
+                <!-- Log entries dynamically injected by JS -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>AI-Based Smart Traffic Signal Optimization &bull; Computer Vision &amp; Adaptive Timing Engine &bull; Developed with Python, OpenCV &amp; Flask</p>
+        </footer>
+
+    </div>
+
+    <!-- Image Inspection Modal -->
+    <div class="modal-backdrop" id="imageModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Processed Vision Output</h3>
+                <button type="button" class="btn-close" onclick="closeImageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="Enlarged Vision Inspection" id="modalImage" class="modal-img">
+            </div>
+            <div class="modal-footer">
+                <span class="modal-info-text">Bounding boxes indicate detected vehicles and computed confidence ratings.</span>
+                <button type="button" class="btn btn-secondary" onclick="closeImageModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
